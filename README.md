@@ -1,5 +1,5 @@
 # FosAlarm
-# Contributors:
-# Aaron Chen
-# Anthony Nguyen
-# Samuel Tse
+Contributors:
+Aaron Chen
+Anthony Nguyen
+Samuel Tse
