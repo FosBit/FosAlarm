@@ -1,4 +1,4 @@
-package com.example.anthony.myapplication;
+package com.phosbit.studios.phosalarm;
 
 import org.junit.Test;
 

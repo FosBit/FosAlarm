@@ -1,4 +1,4 @@
-package com.example.anthony.myapplication;
+package com.phosbit.studios.phosalarm;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
