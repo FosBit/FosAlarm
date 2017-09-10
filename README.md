@@ -2,4 +2,4 @@
 Contributors:
 Aaron Chen,
 Anthony Nguyen,
-Samuel Tse,
+Samuel Tse
