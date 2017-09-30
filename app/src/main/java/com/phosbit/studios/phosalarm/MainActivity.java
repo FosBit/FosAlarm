@@ -3,6 +3,8 @@ package com.phosbit.studios.phosalarm;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -77,28 +79,43 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
-        if(id == R.id.nav_alarm)
+        Fragment fragment = null;
+        Class fragmentClass;
+        switch( item.getItemId() )
         {
+            case R.id.nav_alarm:
+                fragmentClass = MyAlarmFragment.class;
+                break;
 
+
+            case R.id.nav_memory_bank:
+                fragmentClass = test.class;
+                break;
+
+            default:
+                fragmentClass = MyAlarmFragment.class;
         }
 
-//        if (id == R.id.nav_camera) {
-//            // Handle the camera action
-//        } else if (id == R.id.nav_gallery) {
-//
-//        } else if (id == R.id.nav_slideshow) {
-//
-//        } else if (id == R.id.nav_manage) {
-//
-//        } else if (id == R.id.nav_share) {
-//
-//        } else if (id == R.id.nav_send) {
-//
-//        }
+        try
+        {
+            fragment = ( Fragment ) fragmentClass.newInstance();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace( R.id.flContent,fragment ).commit();
+
+        item.setChecked(true);
+        setTitle( item.getTitle() );
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+
+
     }
 }
