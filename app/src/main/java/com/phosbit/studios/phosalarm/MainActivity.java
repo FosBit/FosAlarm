@@ -1,6 +1,7 @@
 package com.phosbit.studios.phosalarm;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -14,9 +15,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.net.Uri;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements MyAlarmFragment.OnFragmentInteractionListener {
+
+    private DrawerLayout m_drawer;
+    private NavigationView m_nvDrawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,14 +39,39 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+        // Find our drawer layout
+        m_drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        // Find our drawer view
+        m_nvDrawer = (NavigationView) findViewById(R.id.nav_view);
+        // Setup drawer view
+        setupDrawerContent( m_nvDrawer );
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, m_drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        toggle.syncState();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected( MenuItem item ) {
+        // The action bar home/up action should open or close the drawer.
+        switch ( item.getItemId() ) {
+            case android.R.id.home:
+                m_drawer.openDrawer( GravityCompat.START );
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void setupDrawerContent(NavigationView navigationView) {
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem ) {
+                        selectDrawerItem( menuItem );
+                        return true;
+                    }
+                });
     }
 
     @Override
@@ -61,23 +91,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        
-        //if (id == R.id.action_settings) {
-        //    return true;
-        //}
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean selectDrawerItem( MenuItem item ) {
         // Handle navigation view item clicks here.
         Fragment fragment = null;
         Class fragmentClass;
@@ -89,7 +103,7 @@ public class MainActivity extends AppCompatActivity
 
 
             case R.id.nav_memory_bank:
-                fragmentClass = test.class;
+                fragmentClass = MyAlarmFragment.class;
                 break;
 
             default:
@@ -117,5 +131,14 @@ public class MainActivity extends AppCompatActivity
         return true;
 
 
+    }
+
+    @Override
+    public void onFragmentInteraction( Uri uri ) {
+        // Leaving blank for now. URI stands for "Uniform Resource Identifier",
+        // a compact sequence of characters that identifies an abstract or physical resource.
+        // It is useful if we have an Android content provider, but since we don't, I think
+        // we can ignore this for now. We still have to override the method it in order to communicate
+        // with our fragments.
     }
 }
