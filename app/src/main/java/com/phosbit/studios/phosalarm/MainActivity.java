@@ -48,6 +48,9 @@ public class MainActivity extends AppCompatActivity
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, m_drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        // Tie DrawerLayout events to the ActionBarDrawerToggle
+        // This lets hamburger icon animate
+        m_drawer.addDrawerListener( toggle );
         toggle.syncState();
     }
 
