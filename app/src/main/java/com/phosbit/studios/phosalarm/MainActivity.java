@@ -20,6 +20,7 @@ import android.net.Uri;
 import android.widget.TimePicker;
 
 import java.util.Calendar;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements MyAlarmFragment.OnFragmentInteractionListener
@@ -27,6 +28,8 @@ public class MainActivity extends AppCompatActivity
 
     private DrawerLayout m_drawer;
     private NavigationView m_nvDrawer;
+    private List<Memory> memories;
+    private List<Alarm> alarms;
 
     @Override
     protected void onCreate( Bundle savedInstanceState )
