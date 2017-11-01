@@ -1,5 +1,6 @@
 package com.phosbit.studios.phosalarm;
 
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -16,6 +17,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.net.Uri;
+import android.widget.TimePicker;
+
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity
         implements MyAlarmFragment.OnFragmentInteractionListener
@@ -38,8 +42,25 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick( View view )
             {
-                Snackbar.make( view, "Replace with your own action", Snackbar.LENGTH_LONG )
-                        .setAction( "Action", null ).show();
+                TimePickerDialog timePicker =
+                    new TimePickerDialog( MainActivity.this,
+                                          new TimePickerDialog.OnTimeSetListener()
+                                          {
+                                              @Override
+                                              public void onTimeSet( TimePicker view,
+                                                                     int hourOfDay,
+                                                                     int minute )
+                                              {
+
+                                              }
+                                          },
+                                          Calendar.getInstance().get( Calendar.HOUR_OF_DAY ),
+                                          Calendar.getInstance().get( Calendar.MINUTE ),
+                                          false ); // 'false' for 12-hour times
+                timePicker.show();
+
+                //Snackbar.make( view, "Replace with your own action", Snackbar.LENGTH_LONG )
+                //        .setAction( "Action", null ).show();
             }
         } );
 
