@@ -7,6 +7,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -19,8 +21,11 @@ import android.view.MenuItem;
 import android.net.Uri;
 import android.widget.TimePicker;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+import static java.sql.DriverManager.println;
 
 public class MainActivity extends AppCompatActivity
         implements MyAlarmFragment.OnFragmentInteractionListener
@@ -28,8 +33,10 @@ public class MainActivity extends AppCompatActivity
 
     private DrawerLayout m_drawer;
     private NavigationView m_nvDrawer;
-    private List<Memory> memories;
-    private List<Alarm> alarms;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private static String LOG_TAG = "CardViewActivity";
 
     @Override
     protected void onCreate( Bundle savedInstanceState )
@@ -154,13 +161,30 @@ public class MainActivity extends AppCompatActivity
         try
         {
             fragment = ( Fragment ) fragmentClass.newInstance();
+
+            //from here can we add views?? IDk
         }catch ( Exception e )
         {
             e.printStackTrace();
         }
 
+        MyAlarmFragment MFA = new MyAlarmFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace( R.id.flContent, fragment ).commit();
+        fragmentManager.beginTransaction().replace(R.id.flContent, MFA ).commit();
+
+        //so this works now, but idk how to get the full view on it...
+
+        //NOT SURE HOW TO GET THIS PART TO WORK... WE HAVE THE FRAGMENT IN NOW
+        //BUT NOT ABLE TO GET THE LAYOUT INSIDE OF IT?
+        //THE FRAGMENT WORKS NOW, BUT IDK HOW TO GET THE NEXT PART WITHIN IT
+                //        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+                //        mRecyclerView.setHasFixedSize(true);
+                //        mLayoutManager = new LinearLayoutManager(this);
+                //        mRecyclerView.setLayoutManager(mLayoutManager);
+                //        mAdapter = new MyRecyclerViewAdapter(getDataSet());
+                //        mRecyclerView.setAdapter(mAdapter);
+        //THIS PART NO IDEA HOW TO SET it though...
+
 
         item.setChecked( true );
         setTitle( item.getTitle() );
@@ -171,6 +195,17 @@ public class MainActivity extends AppCompatActivity
         return true;
 
 
+    }
+
+    private ArrayList<DataObject> getDataSet() {
+        ArrayList results = new ArrayList<DataObject>();
+        //connect this to the fab button.
+        for (int index = 0; index < 20; index++) {
+            DataObject obj = new DataObject("Some Primary Text " + index,
+                    "Secondary " + index);
+            results.add(index, obj);
+        }
+        return results;
     }
 
     @Override
