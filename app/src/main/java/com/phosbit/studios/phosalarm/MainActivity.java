@@ -4,11 +4,8 @@ import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -23,9 +20,6 @@ import android.widget.TimePicker;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
-
-import static java.sql.DriverManager.println;
 
 public class MainActivity extends AppCompatActivity
         implements MyAlarmFragment.OnFragmentInteractionListener
@@ -33,9 +27,6 @@ public class MainActivity extends AppCompatActivity
 
     private DrawerLayout m_drawer;
     private NavigationView m_nvDrawer;
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
     private static String LOG_TAG = "CardViewActivity";
 
     @Override
@@ -53,24 +44,21 @@ public class MainActivity extends AppCompatActivity
             public void onClick( View view )
             {
                 TimePickerDialog timePicker =
-                    new TimePickerDialog( MainActivity.this,
-                                          new TimePickerDialog.OnTimeSetListener()
-                                          {
-                                              @Override
-                                              public void onTimeSet( TimePicker view,
-                                                                     int hourOfDay,
-                                                                     int minute )
-                                              {
+                        new TimePickerDialog( MainActivity.this,
+                                new TimePickerDialog.OnTimeSetListener()
+                                {
+                                    @Override
+                                    public void onTimeSet( TimePicker view,
+                                                           int hourOfDay,
+                                                           int minute )
+                                    {
 
-                                              }
-                                          },
-                                          Calendar.getInstance().get( Calendar.HOUR_OF_DAY ),
-                                          Calendar.getInstance().get( Calendar.MINUTE ),
-                                          false ); // 'false' for 12-hour times
+                                    }
+                                },
+                                Calendar.getInstance().get( Calendar.HOUR_OF_DAY ),
+                                Calendar.getInstance().get( Calendar.MINUTE ),
+                                false ); // 'false' for 12-hour times
                 timePicker.show();
-
-                //Snackbar.make( view, "Replace with your own action", Snackbar.LENGTH_LONG )
-                //        .setAction( "Action", null ).show();
             }
         } );
 
@@ -87,6 +75,32 @@ public class MainActivity extends AppCompatActivity
         // This lets hamburger icon animate
         m_drawer.addDrawerListener( toggle );
         toggle.syncState();
+
+        // SET DEFAULT FRAGMENT
+        // Check that the activity is using the layout version with
+        // the 'flContent' FrameLayout
+        if ( findViewById( R.id.flContent ) != null )
+        {
+
+            // However, if we're being restored from a previous state,
+            // then we don't need to do anything and should return or else
+            // we could end up with overlapping fragments.
+            if ( savedInstanceState != null )
+            {
+                return;
+            }
+
+            // Create a new Fragment to be placed in the activity layout
+            MyAlarmFragment firstFragment = new MyAlarmFragment();
+
+            // In case this activity was started with special instructions from an
+            // Intent, pass the Intent's extras to the fragment as arguments
+            firstFragment.setArguments( getIntent().getExtras() );
+
+            // Add the fragment to the 'flContent' FrameLayout
+            getSupportFragmentManager().beginTransaction()
+                    .add( R.id.flContent, firstFragment ).commit();
+        }
     }
 
     @Override
@@ -160,29 +174,29 @@ public class MainActivity extends AppCompatActivity
 
         try
         {
+            // This is the fragment we will replace the current view with
             fragment = ( Fragment ) fragmentClass.newInstance();
 
-            //from here can we add views?? IDk
         }catch ( Exception e )
         {
             e.printStackTrace();
         }
 
-        MyAlarmFragment MFA = new MyAlarmFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, MFA ).commit();
+        // Add the fragment to the 'flContent' FrameLayout
+        fragmentManager.beginTransaction().replace( R.id.flContent, fragment ).commit();
 
         //so this works now, but idk how to get the full view on it...
 
         //NOT SURE HOW TO GET THIS PART TO WORK... WE HAVE THE FRAGMENT IN NOW
         //BUT NOT ABLE TO GET THE LAYOUT INSIDE OF IT?
         //THE FRAGMENT WORKS NOW, BUT IDK HOW TO GET THE NEXT PART WITHIN IT
-                //        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
-                //        mRecyclerView.setHasFixedSize(true);
-                //        mLayoutManager = new LinearLayoutManager(this);
-                //        mRecyclerView.setLayoutManager(mLayoutManager);
-                //        mAdapter = new MyRecyclerViewAdapter(getDataSet());
-                //        mRecyclerView.setAdapter(mAdapter);
+        //        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        //        mRecyclerView.setHasFixedSize(true);
+        //        mLayoutManager = new LinearLayoutManager(this);
+        //        mRecyclerView.setLayoutManager(mLayoutManager);
+        //        mAdapter = new MyRecyclerViewAdapter(getDataSet());
+        //        mRecyclerView.setAdapter(mAdapter);
         //THIS PART NO IDEA HOW TO SET it though...
 
 
@@ -195,17 +209,6 @@ public class MainActivity extends AppCompatActivity
         return true;
 
 
-    }
-
-    private ArrayList<DataObject> getDataSet() {
-        ArrayList results = new ArrayList<DataObject>();
-        //connect this to the fab button.
-        for (int index = 0; index < 20; index++) {
-            DataObject obj = new DataObject("Some Primary Text " + index,
-                    "Secondary " + index);
-            results.add(index, obj);
-        }
-        return results;
     }
 
     @Override
