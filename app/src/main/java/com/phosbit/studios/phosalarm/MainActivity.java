@@ -18,11 +18,11 @@ import android.view.MenuItem;
 import android.net.Uri;
 import android.widget.TimePicker;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity
-        implements MyAlarmFragment.OnFragmentInteractionListener
+        implements MyAlarmFragment.OnFragmentInteractionListener,
+                   MemoryBankFragment.OnFragmentInteractionListener
 {
 
     private DrawerLayout m_drawer;
@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity
 
 
             case R.id.nav_memory_bank:
-                fragmentClass = MyAlarmFragment.class;
+                fragmentClass = MemoryBankFragment.class;
                 break;
 
             default:
@@ -185,20 +185,6 @@ public class MainActivity extends AppCompatActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
         // Add the fragment to the 'flContent' FrameLayout
         fragmentManager.beginTransaction().replace( R.id.flContent, fragment ).commit();
-
-        //so this works now, but idk how to get the full view on it...
-
-        //NOT SURE HOW TO GET THIS PART TO WORK... WE HAVE THE FRAGMENT IN NOW
-        //BUT NOT ABLE TO GET THE LAYOUT INSIDE OF IT?
-        //THE FRAGMENT WORKS NOW, BUT IDK HOW TO GET THE NEXT PART WITHIN IT
-        //        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
-        //        mRecyclerView.setHasFixedSize(true);
-        //        mLayoutManager = new LinearLayoutManager(this);
-        //        mRecyclerView.setLayoutManager(mLayoutManager);
-        //        mAdapter = new MyRecyclerViewAdapter(getDataSet());
-        //        mRecyclerView.setAdapter(mAdapter);
-        //THIS PART NO IDEA HOW TO SET it though...
-
 
         item.setChecked( true );
         setTitle( item.getTitle() );
