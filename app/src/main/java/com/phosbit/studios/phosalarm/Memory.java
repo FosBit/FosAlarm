@@ -8,11 +8,23 @@ import java.util.List;
 
 public class Memory
 {
+    private String title;
     private String content;
 
-    Memory( String content )
+    Memory( String title, String content )
     {
-        this.content = content;
+        setTitle( title );
+        setContent( content );
+    }
+
+    public void setTitle( String title )
+    {
+        this.title = title;
+    }
+
+    public String getTitle()
+    {
+        return this.title;
     }
 
     public void setContent( String content )

@@ -5,10 +5,8 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="my_alarms">My Alarms</string>
     <string name="memory_bank">Memory Bank</string>
-
-
     <string name="action_settings">Settings</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 </resources>
