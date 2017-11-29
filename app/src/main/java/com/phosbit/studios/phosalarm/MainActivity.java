@@ -62,12 +62,24 @@ public class MainActivity extends AppCompatActivity
             }
         } );
 
+        // Create a new Fragment to be placed in the activity layout
+        MyAlarmFragment firstFragment = new MyAlarmFragment();
+
+        // In case this activity was started with special instructions from an
+        // Intent, pass the Intent's extras to the fragment as arguments
+        firstFragment.setArguments( getIntent().getExtras() );
+
+        // Add the fragment to the 'flContent' FrameLayout
+        getSupportFragmentManager().beginTransaction()
+                .add( R.id.flContent, firstFragment ).commit();
+
         // Find our drawer layout
         m_drawer = ( DrawerLayout ) findViewById( R.id.drawer_layout );
         // Find our drawer view
         m_nvDrawer = ( NavigationView ) findViewById( R.id.nav_view );
         // Setup drawer view
         setupDrawerContent( m_nvDrawer );
+        m_nvDrawer.setCheckedItem( R.id.nav_alarm ); //default item is nav_alarm
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, m_drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close );
@@ -90,16 +102,6 @@ public class MainActivity extends AppCompatActivity
                 return;
             }
 
-            // Create a new Fragment to be placed in the activity layout
-            MyAlarmFragment firstFragment = new MyAlarmFragment();
-
-            // In case this activity was started with special instructions from an
-            // Intent, pass the Intent's extras to the fragment as arguments
-            firstFragment.setArguments( getIntent().getExtras() );
-
-            // Add the fragment to the 'flContent' FrameLayout
-            getSupportFragmentManager().beginTransaction()
-                    .add( R.id.flContent, firstFragment ).commit();
         }
     }
 
