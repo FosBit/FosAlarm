@@ -141,11 +141,17 @@ public class MemoryBankFragment extends Fragment
     {
         memories = new ArrayList<>();
         memories.add( new Memory( "This is content 1", "Lorem ipsum dolor sit amet, " +
-                "consectetur adipiscing elit. In ligula urna, volutpat finibus mi id... " ) );
-        memories.add( new Memory( "This is content 2", "Fusce ac purus dignissim, " +
-                "consectetur purus at, pulvinar risus...") );
-        memories.add( new Memory( "This is content 3", "Quisque luctus tellus sit amet " +
-                "nulla suscipit, a malesuada lectus blandit... " ) );
+                "consectetur adipiscing elit. Donec sodales sapien sit amet neque tempor, et " +
+                "blandit nibh egestas. Praesent scelerisque lobortis lorem, nec rutrum sapien " +
+                "iaculis accumsan. Morbi arcu felis, tempor id blandit eu, laoreet eleifend est." ) );
+        memories.add( new Memory( "This is content 2", "Curabitur diam sem, elementum " +
+                "sit amet hendrerit sit amet, gravida et magna. Pellentesque habitant morbi " +
+                "tristique senectus et netus et malesuada fames ac turpis egestas. In eget rhoncus " +
+                "ante. Pellentesque urna mauris, rutrum non enim et, pellentesque lobortis odio. ") );
+        memories.add( new Memory( "This is content 3", "Phasellus tempor sem sed tellus " +
+                "ornare aliquam. Quisque vel dui dui. Pellentesque lobortis hendrerit dolor nec " +
+                "interdum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per " +
+                "inceptos himenaeos." ) );
     }
 
     private void initializeAdapter()

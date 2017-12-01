@@ -39,7 +39,9 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/memory_title"/>
+                android:layout_below="@+id/memory_title"
+                android:maxLines="2"
+                android:ellipsize="end"/>
 
             <View
                 android:id="@+id/view"
