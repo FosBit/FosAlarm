@@ -1,57 +1,64 @@
 package com.phosbit.studios.phosalarm;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
+import java.util.UUID;
+
 /**
  * Created by Aaron on 10/31/2017.
+ * Last Modified by Aaron on 06/21/2018
+ * Alarm Entity
  */
 
+@Entity
 public class Alarm
 {
-    private int hourOfDay;
-    private int minute;
-    private boolean isSet;
-    private Memory memory;
+    @PrimaryKey
+    private String mAlarmID;
+    @ColumnInfo( name = "time" )
+    private int mTimeOfDay;
+    @ColumnInfo( name = "isSet" )
+    private boolean mIsSet;
+    @ColumnInfo( name = "memoryid" )
+    private String mMemoryID;
 
-    Alarm( int hour, int minute, Memory memory, boolean isSet )
-    {
-        this.hourOfDay = hour;
-        this.minute = minute;
-        this.memory = memory;
-        this.isSet = isSet;
+    Alarm( int timeOfDay, boolean isSet ) {
+        this.mAlarmID = UUID.randomUUID().toString();
+        setTime( timeOfDay );
+        setAlarm( isSet );
     }
 
-    public void setAlarm( boolean isSet )
-    {
-        this.isSet = isSet;
+    public void setAlarm( boolean isSet ) {
+        this.mIsSet = isSet;
     }
 
-    public void setTime( int hour, int minute )
-    {
-        this.hourOfDay = hour;
-        this.minute = minute;
+    public void setTime( int timeOfDay ) {
+        this.mTimeOfDay = timeOfDay;
     }
 
-    public void setMemory( Memory memory )
+    public void setMemory( String memoryID )
     {
-        this.memory = memory;
+        this.mMemoryID = memoryID;
+    }
+
+    public String getID() {
+        return this.mAlarmID;
     }
 
     public boolean getStatus()
     {
-        return this.isSet;
+        return this.mIsSet;
     }
 
-    public int getHourOfDay()
+    public int getTime()
     {
-        return this.hourOfDay;
+        return this.mTimeOfDay;
     }
 
-    public int getMinute()
+    public String getMemoryID()
     {
-        return this.minute;
-    }
-
-    public com.phosbit.studios.phosalarm.Memory getMemory()
-    {
-        return this.memory;
+        return this.mMemoryID;
     }
 }
