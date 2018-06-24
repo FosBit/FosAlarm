@@ -62,16 +62,32 @@ public class MainActivity extends AppCompatActivity
             }
         } );
 
-        // Create a new Fragment to be placed in the activity layout
-        MyAlarmFragment firstFragment = new MyAlarmFragment();
+        // SET DEFAULT FRAGMENT
+        // Check that the activity is using the layout version with
+        // the 'flContent' FrameLayout
+        if ( findViewById( R.id.flContent ) != null )
+        {
 
-        // In case this activity was started with special instructions from an
-        // Intent, pass the Intent's extras to the fragment as arguments
-        firstFragment.setArguments( getIntent().getExtras() );
+            // However, if we're being restored from a previous state,
+            // then we don't need to do anything and should return or else
+            // we could end up with overlapping fragments.
+            if ( savedInstanceState != null )
+            {
+                return;
+            }
 
-        // Add the fragment to the 'flContent' FrameLayout
-        getSupportFragmentManager().beginTransaction()
-                .add( R.id.flContent, firstFragment ).commit();
+            // Create a new Fragment to be placed in the activity layout
+            MyAlarmFragment firstFragment = new MyAlarmFragment();
+
+            // In case this activity was started with special instructions from an
+            // Intent, pass the Intent's extras to the fragment as arguments
+            firstFragment.setArguments( getIntent().getExtras() );
+
+            // Add the fragment to the 'flContent' FrameLayout
+            getSupportFragmentManager().beginTransaction()
+                    .add( R.id.flContent, firstFragment ).commit();
+
+        }
 
         // Find our drawer layout
         m_drawer = ( DrawerLayout ) findViewById( R.id.drawer_layout );
@@ -87,22 +103,6 @@ public class MainActivity extends AppCompatActivity
         // This lets hamburger icon animate
         m_drawer.addDrawerListener( toggle );
         toggle.syncState();
-
-        // SET DEFAULT FRAGMENT
-        // Check that the activity is using the layout version with
-        // the 'flContent' FrameLayout
-        if ( findViewById( R.id.flContent ) != null )
-        {
-
-            // However, if we're being restored from a previous state,
-            // then we don't need to do anything and should return or else
-            // we could end up with overlapping fragments.
-            if ( savedInstanceState != null )
-            {
-                return;
-            }
-
-        }
     }
 
     @Override

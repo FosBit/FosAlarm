@@ -72,7 +72,7 @@ public class MemoryBankRVAdapter extends RecyclerView.Adapter< MemoryBankRVAdapt
     public void onBindViewHolder( MemoriesViewHolder holder, final int i )
     {
         holder.memoryName.setText( memories.get( i ).getTitle() );
-        holder.memoryDesc.setText( memories.get( i ).getContent() );
+        holder.memoryDesc.setText( memories.get( i ).getMessage() );
 
         // Set a click listener for memory edit
         holder.memoryEdit.setOnClickListener( new View.OnClickListener()
