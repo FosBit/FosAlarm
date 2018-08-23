@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity
 
         // SET DEFAULT FRAGMENT
         // Check that the activity is using the layout version with
-        // the 'flContent' FrameLayout
+        // the 'flContent' FrameLayout; defined in content_main.xml
         if ( findViewById( R.id.flContent ) != null )
         {
 
