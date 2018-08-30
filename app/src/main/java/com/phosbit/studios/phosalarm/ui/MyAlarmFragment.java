@@ -1,14 +1,15 @@
-package com.phosbit.studios.phosalarm;
+package com.phosbit.studios.phosalarm.ui;
 
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.phosbit.studios.phosalarm.R;
 
 import java.util.ArrayList;
 
@@ -88,7 +89,7 @@ public class MyAlarmFragment extends Fragment
     }
 
 
-    private ArrayList< DataObject > getDataSet()
+    private ArrayList<DataObject> getDataSet()
     {
         ArrayList results = new ArrayList< DataObject >();
         //connect this to the fab button.

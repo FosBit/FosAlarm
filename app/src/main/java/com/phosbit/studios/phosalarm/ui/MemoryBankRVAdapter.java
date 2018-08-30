@@ -1,7 +1,7 @@
-package com.phosbit.studios.phosalarm;
+package com.phosbit.studios.phosalarm.ui;
 
-import android.content.Context;
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,7 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.support.design.widget.Snackbar;
+
+import com.phosbit.studios.phosalarm.R;
+import com.phosbit.studios.phosalarm.db.Memory;
 
 import java.util.List;
 
@@ -44,7 +46,7 @@ public class MemoryBankRVAdapter extends RecyclerView.Adapter< MemoryBankRVAdapt
         }
     }
 
-    List< Memory > memories;
+    List<Memory> memories;
 
     // Provide a suitable constructor
     MemoryBankRVAdapter( List< Memory > memories )

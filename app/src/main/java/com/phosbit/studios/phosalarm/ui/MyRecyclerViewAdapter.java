@@ -1,4 +1,4 @@
-package com.phosbit.studios.phosalarm;
+package com.phosbit.studios.phosalarm.ui;
 
 /**
  * Created by Anthony on 11/12/2017.
@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.phosbit.studios.phosalarm.R;
 
 import java.util.ArrayList;
 
