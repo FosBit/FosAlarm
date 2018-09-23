@@ -1,6 +1,9 @@
 package com.phosbit.studios.phosalarm;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -44,7 +47,7 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener( new View.OnClickListener()
         {
             @Override
-            public void onClick( View view )
+            public void onClick( View v )
             {
                 TimePickerDialog timePicker =
                         new TimePickerDialog( MainActivity.this,
@@ -55,7 +58,15 @@ public class MainActivity extends AppCompatActivity
                                                            int hourOfDay,
                                                            int minute )
                                     {
-
+                                        Intent myIntent = new Intent(MainActivity.this, AlarmReceiver.class );
+                                        PendingIntent pendingIntent = PendingIntent.getBroadcast( getBaseContext(),
+                                                                                                  0,
+                                                                                                  myIntent,
+                                                                                                  0 );
+                                        AlarmManager alarmManager = (AlarmManager) getSystemService( ALARM_SERVICE );
+                                        alarmManager.set( AlarmManager.RTC_WAKEUP,
+                                                          Calendar.getInstance().getTimeInMillis(),
+                                                          pendingIntent );
                                     }
                                 },
                                 Calendar.getInstance().get( Calendar.HOUR_OF_DAY ),
@@ -100,8 +111,11 @@ public class MainActivity extends AppCompatActivity
         setupDrawerContent( m_nvDrawer );
         m_nvDrawer.setCheckedItem( R.id.nav_alarm ); //default item is nav_alarm
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, m_drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close );
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle( this,
+                                                                  m_drawer,
+                                                                  toolbar,
+                                                                  R.string.navigation_drawer_open,
+                                                                  R.string.navigation_drawer_close );
         // Tie DrawerLayout events to the ActionBarDrawerToggle
         // This lets hamburger icon animate
         m_drawer.addDrawerListener( toggle );

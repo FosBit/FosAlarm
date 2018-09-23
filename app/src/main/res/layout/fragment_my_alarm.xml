@@ -23,18 +23,5 @@ tools:context="com.phosbit.studios.phosalarm.ui.MyAlarmFragment">
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scrollbars="vertical"/>
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:textStyle="bold"
-            android:text="HELLO THERE HOPEFULLY THIS WORKS"/>
-
-    </RelativeLayout>
 
 </RelativeLayout>
