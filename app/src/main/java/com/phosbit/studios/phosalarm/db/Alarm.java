@@ -19,13 +19,13 @@ public class Alarm
     @ColumnInfo( name = "alarm_id")
     private String alarmID;
     @ColumnInfo( name = "time" )
-    private int timeOfDay;
+    private long timeOfDay;
     @ColumnInfo( name = "isSet" )
     private boolean status;
     @ColumnInfo( name = "memory_id" )
     private String memoryID;
 
-    public Alarm( String alarmID, int timeOfDay, boolean status, String memoryID ) {
+    public Alarm( String alarmID, long timeOfDay, boolean status, String memoryID ) {
 
         setAlarmID( alarmID );
         setTimeOfDay( timeOfDay );
@@ -37,7 +37,7 @@ public class Alarm
         this.alarmID = alarmID;
     }
 
-    public void setTimeOfDay( int timeOfDay ) {
+    public void setTimeOfDay( long timeOfDay ) {
         this.timeOfDay = timeOfDay;
     }
 
@@ -54,7 +54,7 @@ public class Alarm
         return this.alarmID;
     }
 
-    public int getTimeOfDay()
+    public long getTimeOfDay()
     {
         return this.timeOfDay;
     }

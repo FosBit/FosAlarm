@@ -4,14 +4,18 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.phosbit.studios.phosalarm.R;
+import com.phosbit.studios.phosalarm.db.Alarm;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 
 /**
@@ -32,11 +36,10 @@ public class MyAlarmFragment extends Fragment
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private List<Alarm> alarms;
+    private RecyclerView rv;
 
     private OnFragmentInteractionListener mListener;
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
 
     public MyAlarmFragment()
     {
@@ -79,27 +82,16 @@ public class MyAlarmFragment extends Fragment
     {
         // Inflate the layout for this fragment
         View view =  inflater.inflate( R.layout.fragment_my_alarm, container, false );
-        mRecyclerView = ( RecyclerView ) view.findViewById( R.id.my_recycler_view );
-        mRecyclerView.setHasFixedSize( true );
-        mRecyclerView.setLayoutManager( mLayoutManager );
-        mAdapter = new MyRecyclerViewAdapter( getDataSet() );
-        mRecyclerView.setAdapter( mAdapter );
 
+        rv = view.findViewById( R.id.alarm_rv );
+
+        LinearLayoutManager llm = new LinearLayoutManager( getActivity() );
+        rv.setLayoutManager( llm );
+        rv.setHasFixedSize( true );
+
+        initializeData();
+        initializeAdapter();
         return view;
-    }
-
-
-    private ArrayList<DataObject> getDataSet()
-    {
-        ArrayList results = new ArrayList< DataObject >();
-        //connect this to the fab button.
-        for ( int index = 0; index < 20; index++ )
-        {
-            DataObject obj = new DataObject( "Some Primary Text " + index,
-                    "Secondary " + index );
-            results.add( index, obj );
-        }
-        return results;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -146,5 +138,17 @@ public class MyAlarmFragment extends Fragment
     {
         // TODO: Update argument type and name
         void onFragmentInteraction( Uri uri );
+    }
+
+    private void initializeData()
+    {
+        alarms = new ArrayList<>();
+        alarms.add( new Alarm( "1", Calendar.getInstance().getTimeInMillis(), false, "1" ) );
+    }
+
+    private void initializeAdapter()
+    {
+        AlarmRVAdapter adapter = new AlarmRVAdapter( alarms );
+        rv.setAdapter( adapter );
     }
 }

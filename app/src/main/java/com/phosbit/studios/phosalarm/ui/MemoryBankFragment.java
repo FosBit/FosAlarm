@@ -82,7 +82,7 @@ public class MemoryBankFragment extends Fragment
         // Inflate the layout for this fragment
         View view = inflater.inflate( R.layout.fragment_memory_bank, container, false );
 
-        rv = ( RecyclerView ) view.findViewById( R.id.rv );
+        rv = view.findViewById( R.id.memory_rv );
 
         LinearLayoutManager llm = new LinearLayoutManager( getActivity() );
         rv.setLayoutManager( llm );
