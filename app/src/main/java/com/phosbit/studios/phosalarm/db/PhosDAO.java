@@ -1,5 +1,6 @@
 package com.phosbit.studios.phosalarm.db;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -13,10 +14,10 @@ public interface PhosDAO {
     //TODO: Add queries that are needed
 
     @Query("SELECT * FROM Memory")
-    public List<Memory> getMemories();
+    public LiveData<List<Memory>> getMemories();
 
     @Query("SELECT * FROM Alarm")
-    public List<Alarm> getAlarms();
+    public LiveData<List<Alarm>> getAlarms();
 
     @Insert
     public void insertAlarms( Alarm... alarms );

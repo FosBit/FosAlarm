@@ -1,15 +1,30 @@
 package com.phosbit.studios.phosalarm.db;
 
 import android.app.Application;
+import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
+
+import java.util.List;
 
 public class PhosRepositiory {
     private PhosDAO mPhosDao;
+    private LiveData<List<Alarm>> mAlarms;
+    private LiveData<List<Memory>> mMemories;
 
     // Constructor
     PhosRepositiory( Application application ) {
         PhosRoomDatabase db = PhosRoomDatabase.getDatabase( application );
         mPhosDao = db.phosDAO();
+        mAlarms = mPhosDao.getAlarms();
+        mMemories = mPhosDao.getMemories();
+    }
+
+    LiveData<List<Alarm>> getAlarms() {
+        return mAlarms;
+    }
+
+    LiveData<List<Memory>> getMemories() {
+        return mMemories;
     }
 
     public void insertAlarms( final Alarm... alarms ) {
@@ -20,7 +35,7 @@ public class PhosRepositiory {
         new insertMemoriesAsync( mPhosDao ).execute( memories );
     }
 
-    public void updateAlarm( final Alarm... alarms ) {
+    public void updateAlarms( final Alarm... alarms ) {
         new updateAlarmsAsync( mPhosDao ).execute( alarms );
     }
 
