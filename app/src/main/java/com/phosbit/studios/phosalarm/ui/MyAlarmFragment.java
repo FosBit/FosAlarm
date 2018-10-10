@@ -12,9 +12,9 @@ import android.view.ViewGroup;
 
 import com.phosbit.studios.phosalarm.R;
 import com.phosbit.studios.phosalarm.db.Alarm;
+import com.phosbit.studios.phosalarm.db.PhosViewModel;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 
@@ -28,40 +28,23 @@ import java.util.List;
  */
 public class MyAlarmFragment extends Fragment
 {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
     private List<Alarm> alarms;
     private RecyclerView rv;
+    private boolean isInitialized;
+    private View alarmsView;
+    private PhosViewModel mPhosViewModel;
 
     private OnFragmentInteractionListener mListener;
 
-    public MyAlarmFragment()
+    public MyAlarmFragment( PhosViewModel viewModel )
     {
-        // Required empty public constructor
+        isInitialized = false;
+        mPhosViewModel = viewModel;
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MyAlarmFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static MyAlarmFragment newInstance( String param1, String param2 )
+    public static MyAlarmFragment newInstance( PhosViewModel viewModel )
     {
-        MyAlarmFragment fragment = new MyAlarmFragment();
-        Bundle args = new Bundle();
-        args.putString( ARG_PARAM1, param1 );
-        args.putString( ARG_PARAM2, param2 );
-        fragment.setArguments( args );
+        MyAlarmFragment fragment = new MyAlarmFragment( viewModel );
         return fragment;
     }
 
@@ -69,38 +52,26 @@ public class MyAlarmFragment extends Fragment
     public void onCreate( Bundle savedInstanceState )
     {
         super.onCreate( savedInstanceState );
-        if ( getArguments() != null )
-        {
-            mParam1 = getArguments().getString( ARG_PARAM1 );
-            mParam2 = getArguments().getString( ARG_PARAM2 );
-        }
     }
 
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container,
                               Bundle savedInstanceState )
     {
-        // Inflate the layout for this fragment
-        View view =  inflater.inflate( R.layout.fragment_my_alarm, container, false );
+        if ( !isInitialized ) {
+            // Inflate the layout for this fragment
+            alarmsView =  inflater.inflate( R.layout.fragment_my_alarm, container, false );
 
-        rv = view.findViewById( R.id.alarm_rv );
+            rv = alarmsView.findViewById( R.id.alarm_rv );
 
-        LinearLayoutManager llm = new LinearLayoutManager( getActivity() );
-        rv.setLayoutManager( llm );
-        rv.setHasFixedSize( true );
-
-        initializeData();
-        initializeAdapter();
-        return view;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed( Uri uri )
-    {
-        if ( mListener != null )
-        {
-            mListener.onFragmentInteraction( uri );
+            LinearLayoutManager llm = new LinearLayoutManager( getActivity() );
+            rv.setLayoutManager( llm );
+            rv.setHasFixedSize( true );
+            alarms = new ArrayList<>();
+            initializeAdapter();
+            isInitialized = true;
         }
+        return alarmsView;
     }
 
     @Override
@@ -140,15 +111,17 @@ public class MyAlarmFragment extends Fragment
         void onFragmentInteraction( Uri uri );
     }
 
-    private void initializeData()
+
+    public void updateData( final List<Alarm> alarms )
     {
-        alarms = new ArrayList<>();
-        alarms.add( new Alarm( "1", Calendar.getInstance().getTimeInMillis(), false, "1" ) );
+        this.alarms = alarms;
+        AlarmRVAdapter adapter = ( AlarmRVAdapter  ) rv.getAdapter();
+        adapter.updateAlarms( this.alarms );
     }
 
     private void initializeAdapter()
     {
-        AlarmRVAdapter adapter = new AlarmRVAdapter( alarms );
+        AlarmRVAdapter adapter = new AlarmRVAdapter( this.alarms, mPhosViewModel );
         rv.setAdapter( adapter );
     }
 }

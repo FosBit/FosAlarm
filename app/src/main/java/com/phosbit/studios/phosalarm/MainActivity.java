@@ -3,10 +3,13 @@ package com.phosbit.studios.phosalarm;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -21,10 +24,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TimePicker;
 
+import com.phosbit.studios.phosalarm.db.Alarm;
+import com.phosbit.studios.phosalarm.db.PhosViewModel;
 import com.phosbit.studios.phosalarm.ui.MemoryBankFragment;
 import com.phosbit.studios.phosalarm.ui.MyAlarmFragment;
 
 import java.util.Calendar;
+import java.util.List;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity
         implements MyAlarmFragment.OnFragmentInteractionListener,
@@ -34,11 +41,44 @@ public class MainActivity extends AppCompatActivity
     private DrawerLayout m_drawer;
     private NavigationView m_nvDrawer;
     private static String LOG_TAG = "CardViewActivity";
+    private PhosViewModel mPhosViewModel;
+    private MyAlarmFragment alarmFragment;
+    private MemoryBankFragment memoryBankFragment;
 
     @Override
     protected void onCreate( Bundle savedInstanceState )
     {
         super.onCreate( savedInstanceState );
+
+        /*
+         * Use ViewModelProviders to associate your ViewModel with your UI controller.
+         * When the app first starts, the ViewModelProviders will create the ViewModel.
+         * When the activity is destroyed, for example through a configuration change,
+         * the ViewModel persists. When the activity is re-created, the ViewModelProviders
+         * return the existing ViewModel.
+         */
+        mPhosViewModel = ViewModelProviders.of( this ).get( PhosViewModel.class );
+
+        //Instantiate Fragments
+        alarmFragment = MyAlarmFragment.newInstance( mPhosViewModel );
+        memoryBankFragment = MemoryBankFragment.newInstance( "Hello", "World" );
+
+        // Add an observer on the LiveData returned by getAlarms and getMemories.
+        // The onChanged() method fires when the observed data changes and the activity is
+        // in the foreground.
+        mPhosViewModel.getAlarms().observe(this, new Observer<List<Alarm>>() {
+            @Override
+            public void onChanged(@Nullable final List<Alarm> alarms) {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                MyAlarmFragment fmt = ( MyAlarmFragment ) fragmentManager.findFragmentByTag( "alarm_fragment" );
+                if ( fmt != null ){
+                    if ( fmt.isVisible() ) {
+                        fmt.updateData( alarms );
+                    }
+                }
+            }
+        });
+
         setContentView( R.layout.activity_main );
         Toolbar toolbar = ( Toolbar ) findViewById( R.id.toolbar );
         setSupportActionBar( toolbar );
@@ -67,6 +107,10 @@ public class MainActivity extends AppCompatActivity
                                         alarmManager.set( AlarmManager.RTC_WAKEUP,
                                                           Calendar.getInstance().getTimeInMillis(),
                                                           pendingIntent );
+                                        Alarm alarm = new Alarm( UUID.randomUUID().toString(),
+                                                                 Calendar.getInstance().getTimeInMillis(),
+                                                                 true, "1" );
+                                        mPhosViewModel.insertAlarms( alarm );
                                     }
                                 },
                                 Calendar.getInstance().get( Calendar.HOUR_OF_DAY ),
@@ -76,7 +120,6 @@ public class MainActivity extends AppCompatActivity
             }
         } );
 
-        // SET DEFAULT FRAGMENT
         // Check that the activity is using the layout version with
         // the 'flContent' FrameLayout; defined in content_main.xml
         if ( findViewById( R.id.flContent ) != null )
@@ -85,21 +128,9 @@ public class MainActivity extends AppCompatActivity
             // However, if we're being restored from a previous state,
             // then we don't need to do anything and should return or else
             // we could end up with overlapping fragments.
-            if ( savedInstanceState != null )
-            {
+            if ( savedInstanceState != null ) {
                 return;
             }
-
-            // Create a new Fragment to be placed in the activity layout
-            MyAlarmFragment firstFragment = new MyAlarmFragment();
-
-            // In case this activity was started with special instructions from an
-            // Intent, pass the Intent's extras to the fragment as arguments
-            firstFragment.setArguments( getIntent().getExtras() );
-
-            // Add the fragment to the 'flContent' FrameLayout
-            getSupportFragmentManager().beginTransaction()
-                    .add( R.id.flContent, firstFragment ).commit();
 
         }
 
@@ -109,7 +140,8 @@ public class MainActivity extends AppCompatActivity
         m_nvDrawer = ( NavigationView ) findViewById( R.id.nav_view );
         // Setup drawer view
         setupDrawerContent( m_nvDrawer );
-        m_nvDrawer.setCheckedItem( R.id.nav_alarm ); //default item is nav_alarm
+        // Default item is nav_alarm
+        selectDrawerItem( m_nvDrawer.getMenu().getItem(0) );
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle( this,
                                                                   m_drawer,
@@ -175,36 +207,30 @@ public class MainActivity extends AppCompatActivity
     {
         // Handle navigation view item clicks here.
         Fragment fragment = null;
-        Class fragmentClass;
+        String fragmentTag;
         switch ( item.getItemId() )
         {
             case R.id.nav_alarm:
-                fragmentClass = MyAlarmFragment.class;
+                fragment = alarmFragment;
+                fragmentTag = "alarm_fragment";
                 break;
 
 
             case R.id.nav_memory_bank:
-                fragmentClass = MemoryBankFragment.class;
+                fragment = memoryBankFragment;
+                fragmentTag = "memory_fragment";
                 break;
 
             default:
-                fragmentClass = MyAlarmFragment.class;
+                fragment = alarmFragment;
+                fragmentTag = "alarm_fragment";
         }
 
-        try
-        {
-            // This is the fragment we will replace the current view with
-            fragment = ( Fragment ) fragmentClass.newInstance();
-
-        }catch ( Exception e )
-        {
-            e.printStackTrace();
-        }
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
         // Add the fragment to the 'flContent' FrameLayout
-        fragmentManager.beginTransaction().replace( R.id.flContent, fragment ).commit();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace( R.id.flContent, fragment, fragmentTag ).commit();
 
+        // Update ActionBar
         item.setChecked( true );
         setTitle( item.getTitle() );
 

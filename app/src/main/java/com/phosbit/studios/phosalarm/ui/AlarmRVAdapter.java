@@ -8,12 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import com.phosbit.studios.phosalarm.R;
 import com.phosbit.studios.phosalarm.db.Alarm;
+import com.phosbit.studios.phosalarm.db.PhosViewModel;
 
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -48,11 +51,21 @@ public class AlarmRVAdapter extends RecyclerView.Adapter< AlarmRVAdapter.AlarmsV
     }
 
     List<Alarm> alarms;
+    PhosViewModel viewModel;
 
     // Provide a suitable constructor
-    AlarmRVAdapter(List<Alarm> alarms )
+    AlarmRVAdapter( List<Alarm> alarms, PhosViewModel viewModel )
     {
         this.alarms = alarms;
+        this.viewModel = viewModel;
+    }
+
+    public void updateAlarms( List<Alarm> alarms ) {
+        if ( alarms != null && alarms.size() > 0 ) {
+            this.alarms.clear();
+            this.alarms.addAll( alarms );
+            notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -72,11 +85,17 @@ public class AlarmRVAdapter extends RecyclerView.Adapter< AlarmRVAdapter.AlarmsV
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder( AlarmsViewHolder holder, final int i )
-    {
-        holder.alarmName.setText( alarms.get( i ).getAlarmID() );
+    public void onBindViewHolder( AlarmsViewHolder holder, final int i ) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis( alarms.get( i ).getTimeOfDay() );
+        int hour = calendar.get( Calendar.HOUR_OF_DAY );
+        int minute = calendar.get( Calendar.MINUTE );
+        String time = Integer.toString( hour ) + ":" + Integer.toString( minute );
 
-        // Set a click listener for memory edit
+        holder.alarmName.setText( time );
+        holder.alarmSwitch.setChecked( alarms.get( i ).getStatus() );
+
+        // Set a click listener for alarm edit
         holder.alarmEdit.setOnClickListener( new View.OnClickListener()
         {
             @Override
@@ -88,26 +107,23 @@ public class AlarmRVAdapter extends RecyclerView.Adapter< AlarmRVAdapter.AlarmsV
             }
         });
 
-        // Same for memory delete
-        holder.alarmDelete.setOnClickListener( new View.OnClickListener()
-        {
+        // Same for alarm delete
+        holder.alarmDelete.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick( View v )
             {
-                // Get the clicked item label
-                String alarmTitle = alarms.get( i ).getAlarmID();
-                // Remove the item on delete button click
-                alarms.remove( i );
-                // Notify any registered observers that the item previously located at position
-                // has been removed from the data set. The items previously located at and
-                // after position may now be found at oldPosition - 1.
-                notifyItemRemoved( i );
-                // Notify any registered observers that the itemCount items starting at
-                // position positionStart have changed.
-                notifyItemRangeChanged( i, alarms.size() );
+                // Remove alarm from database
+                viewModel.deleteAlarms( alarms.get( i ) );
+                // Show removed notification
+                Snackbar.make( v, "Alarm Removed.", Snackbar.LENGTH_LONG ).show();
+            }
+        });
 
-                // Show the removed item title
-                Snackbar.make( v, "Removed: " + alarmTitle, Snackbar.LENGTH_LONG ).show();
+        // And alarm switch
+        holder.alarmSwitch.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged( CompoundButton buttonView, boolean isChecked ) {
+                alarms.get( i ).setStatus( isChecked );
+                viewModel.updateAlarms( alarms.get( i ) );
             }
         });
     }
