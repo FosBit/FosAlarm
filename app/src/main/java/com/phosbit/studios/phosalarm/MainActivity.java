@@ -25,7 +25,9 @@ import android.view.View;
 import android.widget.TimePicker;
 
 import com.phosbit.studios.phosalarm.db.Alarm;
+import com.phosbit.studios.phosalarm.db.Memory;
 import com.phosbit.studios.phosalarm.db.PhosViewModel;
+import com.phosbit.studios.phosalarm.ui.EditMemoryActivity;
 import com.phosbit.studios.phosalarm.ui.MemoryBankFragment;
 import com.phosbit.studios.phosalarm.ui.MyAlarmFragment;
 
@@ -60,8 +62,8 @@ public class MainActivity extends AppCompatActivity
         mPhosViewModel = ViewModelProviders.of( this ).get( PhosViewModel.class );
 
         //Instantiate Fragments
-        alarmFragment = MyAlarmFragment.newInstance( mPhosViewModel );
-        memoryBankFragment = MemoryBankFragment.newInstance( "Hello", "World" );
+        alarmFragment = MyAlarmFragment.newInstance();
+        memoryBankFragment = MemoryBankFragment.newInstance();
 
         // Add an observer on the LiveData returned by getAlarms and getMemories.
         // The onChanged() method fires when the observed data changes and the activity is
@@ -79,6 +81,19 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+        mPhosViewModel.getMemories().observe(this, new Observer<List<Memory>>() {
+            @Override
+            public void onChanged(@Nullable final List<Memory> memories) {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                MemoryBankFragment fmt = ( MemoryBankFragment ) fragmentManager.findFragmentByTag( "memory_fragment" );
+                if ( fmt != null ){
+                    if ( fmt.isVisible() ) {
+                        fmt.updateData( memories );
+                    }
+                }
+            }
+        });
+
         setContentView( R.layout.activity_main );
         Toolbar toolbar = ( Toolbar ) findViewById( R.id.toolbar );
         setSupportActionBar( toolbar );
@@ -89,34 +104,37 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick( View v )
             {
-                TimePickerDialog timePicker =
-                        new TimePickerDialog( MainActivity.this,
-                                new TimePickerDialog.OnTimeSetListener()
-                                {
-                                    @Override
-                                    public void onTimeSet( TimePicker view,
-                                                           int hourOfDay,
-                                                           int minute )
-                                    {
-                                        Intent myIntent = new Intent(MainActivity.this, AlarmReceiver.class );
-                                        PendingIntent pendingIntent = PendingIntent.getBroadcast( getBaseContext(),
-                                                                                                  0,
-                                                                                                  myIntent,
-                                                                                                  0 );
-                                        AlarmManager alarmManager = (AlarmManager) getSystemService( ALARM_SERVICE );
-                                        alarmManager.set( AlarmManager.RTC_WAKEUP,
-                                                          Calendar.getInstance().getTimeInMillis(),
-                                                          pendingIntent );
-                                        Alarm alarm = new Alarm( UUID.randomUUID().toString(),
-                                                                 Calendar.getInstance().getTimeInMillis(),
-                                                                 true, "1" );
-                                        mPhosViewModel.insertAlarms( alarm );
-                                    }
-                                },
-                                Calendar.getInstance().get( Calendar.HOUR_OF_DAY ),
-                                Calendar.getInstance().get( Calendar.MINUTE ),
-                                false ); // 'false' for 12-hour times
-                timePicker.show();
+                if ( getTitle().toString().equals( "Memory Bank" ) ) {
+                    Intent intent = new Intent( v.getContext(), EditMemoryActivity.class );
+                    v.getContext().startActivity( intent );
+                } else {
+                    TimePickerDialog timePicker =
+                            new TimePickerDialog(MainActivity.this,
+                                    new TimePickerDialog.OnTimeSetListener() {
+                                        @Override
+                                        public void onTimeSet(TimePicker view,
+                                                              int hourOfDay,
+                                                              int minute) {
+                                            Intent myIntent = new Intent(MainActivity.this, AlarmReceiver.class);
+                                            PendingIntent pendingIntent = PendingIntent.getBroadcast(getBaseContext(),
+                                                    0,
+                                                    myIntent,
+                                                    0);
+                                            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+                                            alarmManager.set(AlarmManager.RTC_WAKEUP,
+                                                    Calendar.getInstance().getTimeInMillis(),
+                                                    pendingIntent);
+                                            Alarm alarm = new Alarm(UUID.randomUUID().toString(),
+                                                    Calendar.getInstance().getTimeInMillis(),
+                                                    true, "1");
+                                            mPhosViewModel.insertAlarms(alarm);
+                                        }
+                                    },
+                                    Calendar.getInstance().get(Calendar.HOUR_OF_DAY),
+                                    Calendar.getInstance().get(Calendar.MINUTE),
+                                    false); // 'false' for 12-hour times
+                    timePicker.show();
+                }
             }
         } );
 

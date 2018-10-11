@@ -1,5 +1,6 @@
 package com.phosbit.studios.phosalarm.ui;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -30,21 +31,20 @@ public class MyAlarmFragment extends Fragment
 {
     private List<Alarm> alarms;
     private RecyclerView rv;
-    private boolean isInitialized;
     private View alarmsView;
+    private boolean isInitialized;
     private PhosViewModel mPhosViewModel;
 
     private OnFragmentInteractionListener mListener;
 
-    public MyAlarmFragment( PhosViewModel viewModel )
+    public MyAlarmFragment()
     {
         isInitialized = false;
-        mPhosViewModel = viewModel;
     }
 
-    public static MyAlarmFragment newInstance( PhosViewModel viewModel )
+    public static MyAlarmFragment newInstance()
     {
-        MyAlarmFragment fragment = new MyAlarmFragment( viewModel );
+        MyAlarmFragment fragment = new MyAlarmFragment();
         return fragment;
     }
 
@@ -52,6 +52,9 @@ public class MyAlarmFragment extends Fragment
     public void onCreate( Bundle savedInstanceState )
     {
         super.onCreate( savedInstanceState );
+        if (mPhosViewModel == null) {
+            mPhosViewModel = ViewModelProviders.of(getActivity()).get(PhosViewModel.class);
+        }
     }
 
     @Override
@@ -67,11 +70,21 @@ public class MyAlarmFragment extends Fragment
             LinearLayoutManager llm = new LinearLayoutManager( getActivity() );
             rv.setLayoutManager( llm );
             rv.setHasFixedSize( true );
+
             alarms = new ArrayList<>();
             initializeAdapter();
             isInitialized = true;
         }
         return alarmsView;
+    }
+
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onButtonPressed( Uri uri )
+    {
+        if ( mListener != null )
+        {
+            mListener.onFragmentInteraction( uri );
+        }
     }
 
     @Override

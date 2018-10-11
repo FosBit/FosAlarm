@@ -1,5 +1,6 @@
 package com.phosbit.studios.phosalarm.ui;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.phosbit.studios.phosalarm.R;
 import com.phosbit.studios.phosalarm.db.Memory;
+import com.phosbit.studios.phosalarm.db.PhosViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,51 +29,31 @@ import java.util.List;
  */
 public class MemoryBankFragment extends Fragment
 {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
     private List<Memory> memories;
     private RecyclerView rv;
+    private View mbView;
+    private boolean isInitialized;
+    private PhosViewModel mPhosViewModel;
 
     private OnFragmentInteractionListener mListener;
 
     public MemoryBankFragment()
     {
+        isInitialized = false;
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MemoryBankFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static MemoryBankFragment newInstance( String param1, String param2 )
+    public static MemoryBankFragment newInstance()
     {
         MemoryBankFragment fragment = new MemoryBankFragment();
-        Bundle args = new Bundle();
-        args.putString( ARG_PARAM1, param1 );
-        args.putString( ARG_PARAM2, param2 );
-        fragment.setArguments( args );
         return fragment;
     }
 
     @Override
-    public void onCreate( Bundle savedInstanceState )
-    {
-        super.onCreate( savedInstanceState );
-        if ( getArguments() != null )
-        {
-            mParam1 = getArguments().getString( ARG_PARAM1 );
-            mParam2 = getArguments().getString( ARG_PARAM2 );
+    public void onCreate( Bundle savedInstanceState ) {
+        super.onCreate(savedInstanceState);
+        if (mPhosViewModel == null) {
+            mPhosViewModel = ViewModelProviders.of(getActivity()).get(PhosViewModel.class);
         }
     }
 
@@ -79,19 +61,21 @@ public class MemoryBankFragment extends Fragment
     public View onCreateView( LayoutInflater inflater, ViewGroup container,
                               Bundle savedInstanceState )
     {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate( R.layout.fragment_memory_bank, container, false );
+        if ( !isInitialized ) {
+            // Inflate the layout for this fragment
+            mbView = inflater.inflate(R.layout.fragment_memory_bank, container, false);
 
-        rv = view.findViewById( R.id.memory_rv );
+            rv = mbView.findViewById(R.id.memory_rv);
 
-        LinearLayoutManager llm = new LinearLayoutManager( getActivity() );
-        rv.setLayoutManager( llm );
-        rv.setHasFixedSize( true );
+            LinearLayoutManager llm = new LinearLayoutManager(getActivity());
+            rv.setLayoutManager(llm);
+            rv.setHasFixedSize(true);
 
-        initializeData();
-        initializeAdapter();
-
-        return view;
+            memories = new ArrayList<>();
+            initializeAdapter();
+            isInitialized = true;
+        }
+        return mbView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -139,26 +123,16 @@ public class MemoryBankFragment extends Fragment
         void onFragmentInteraction( Uri uri );
     }
 
-    private void initializeData()
+    public void updateData( final List<Memory> memories )
     {
-        memories = new ArrayList<>();
-        memories.add( new Memory( "1", "This is content 1", "Lorem ipsum dolor sit amet, " +
-                "consectetur adipiscing elit. Donec sodales sapien sit amet neque tempor, et " +
-                "blandit nibh egestas. Praesent scelerisque lobortis lorem, nec rutrum sapien " +
-                "iaculis accumsan. Morbi arcu felis, tempor id blandit eu, laoreet eleifend est." ) );
-        memories.add( new Memory( "2", "This is content 2", "Curabitur diam sem, elementum " +
-                "sit amet hendrerit sit amet, gravida et magna. Pellentesque habitant morbi " +
-                "tristique senectus et netus et malesuada fames ac turpis egestas. In eget rhoncus " +
-                "ante. Pellentesque urna mauris, rutrum non enim et, pellentesque lobortis odio. ") );
-        memories.add( new Memory( "3", "This is content 3", "Phasellus tempor sem sed tellus " +
-                "ornare aliquam. Quisque vel dui dui. Pellentesque lobortis hendrerit dolor nec " +
-                "interdum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per " +
-                "inceptos himenaeos." ) );
+        this.memories = memories;
+        MemoryBankRVAdapter adapter = ( MemoryBankRVAdapter  ) rv.getAdapter();
+        adapter.updateMemories( this.memories );
     }
 
     private void initializeAdapter()
     {
-        MemoryBankRVAdapter adapter = new MemoryBankRVAdapter( memories );
+        MemoryBankRVAdapter adapter = new MemoryBankRVAdapter( this.memories, mPhosViewModel );
         rv.setAdapter( adapter );
     }
 }

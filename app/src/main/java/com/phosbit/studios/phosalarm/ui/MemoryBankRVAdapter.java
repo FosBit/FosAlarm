@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.phosbit.studios.phosalarm.R;
 import com.phosbit.studios.phosalarm.db.Memory;
+import com.phosbit.studios.phosalarm.db.PhosViewModel;
 
 import java.util.List;
 
@@ -47,11 +48,21 @@ public class MemoryBankRVAdapter extends RecyclerView.Adapter< MemoryBankRVAdapt
     }
 
     List<Memory> memories;
+    PhosViewModel viewModel;
 
     // Provide a suitable constructor
-    MemoryBankRVAdapter( List<Memory> memories )
+    MemoryBankRVAdapter( List<Memory> memories, PhosViewModel viewModel )
     {
         this.memories = memories;
+        this.viewModel = viewModel;
+    }
+
+    public void updateMemories( List<Memory> memories ) {
+        if ( memories != null && memories.size() > 0 ) {
+            this.memories.clear();
+            this.memories.addAll( memories );
+            notifyDataSetChanged();
+        }
     }
 
     @Override
