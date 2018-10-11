@@ -1,4 +1,4 @@
-package com.phosbit.studios.phosalarm.db;
+package com.fosbit.studios.fosalarm.db;
 
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
@@ -9,24 +9,24 @@ import android.content.Context;
 // and set the version number. Listing the entities will create tables
 // in the database.
 @Database( entities = { Alarm.class, Memory.class }, version = 1 )
-public abstract class PhosRoomDatabase extends RoomDatabase {
+public abstract class FosRoomDatabase extends RoomDatabase {
     // "getter" method for DAO
-    public abstract PhosDAO phosDAO();
+    public abstract FosDAO phosDAO();
 
-    // Make PhosRoomDatabase a singleton to prevent having multiple instances of the
+    // Make FosRoomDatabase a singleton to prevent having multiple instances of the
     // database opened at the same time.
-    private static PhosRoomDatabase INSTANCE;
+    private static FosRoomDatabase INSTANCE;
 
-    public static PhosRoomDatabase getDatabase( final Context context ) {
+    public static FosRoomDatabase getDatabase(final Context context ) {
         if ( INSTANCE == null ) {
             // synchronized; only one thread can execute at a time, other threads are blocked
-            synchronized ( PhosRoomDatabase.class ) {
+            synchronized ( FosRoomDatabase.class ) {
                 if ( INSTANCE == null ) {
                     // This code uses Room's database builder to create a RoomDatabase object
-                    // in the application context from the PhosRoomDatabase class named
+                    // in the application context from the FosRoomDatabase class named
                     // "phos_database"
                     INSTANCE = Room.databaseBuilder( context.getApplicationContext(),
-                               PhosRoomDatabase.class, "phos_database" ).build();
+                               FosRoomDatabase.class, "phos_database" ).build();
                 }
             }
         }

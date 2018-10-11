@@ -1,4 +1,4 @@
-package com.phosbit.studios.phosalarm.ui;
+package com.fosbit.studios.fosalarm.ui;
 
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
@@ -10,9 +10,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.phosbit.studios.phosalarm.R;
-import com.phosbit.studios.phosalarm.db.Memory;
-import com.phosbit.studios.phosalarm.db.PhosViewModel;
+import com.fosbit.studios.fosalarm.R;
+import com.fosbit.studios.fosalarm.db.Memory;
+import com.fosbit.studios.fosalarm.db.FosViewModel;
 
 import java.util.List;
 
@@ -48,10 +48,10 @@ public class MemoryBankRVAdapter extends RecyclerView.Adapter< MemoryBankRVAdapt
     }
 
     List<Memory> memories;
-    PhosViewModel viewModel;
+    FosViewModel viewModel;
 
     // Provide a suitable constructor
-    MemoryBankRVAdapter( List<Memory> memories, PhosViewModel viewModel )
+    MemoryBankRVAdapter( List<Memory> memories, FosViewModel viewModel )
     {
         this.memories = memories;
         this.viewModel = viewModel;

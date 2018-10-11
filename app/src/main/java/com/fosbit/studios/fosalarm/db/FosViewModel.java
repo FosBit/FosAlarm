@@ -1,4 +1,4 @@
-package com.phosbit.studios.phosalarm.db;
+package com.fosbit.studios.fosalarm.db;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
@@ -6,14 +6,14 @@ import android.arch.lifecycle.LiveData;
 
 import java.util.List;
 
-public class PhosViewModel extends AndroidViewModel {
-    private PhosRepositiory mRepository;
+public class FosViewModel extends AndroidViewModel {
+    private FosRepositiory mRepository;
     private LiveData<List<Alarm>> mAlarms;
     private LiveData<List<Memory>> mMemories;
 
-    public PhosViewModel ( Application application ) {
+    public FosViewModel(Application application ) {
         super( application );
-        mRepository = new PhosRepositiory( application );
+        mRepository = new FosRepositiory( application );
         mAlarms = mRepository.getAlarms();
         mMemories = mRepository.getMemories();
     }

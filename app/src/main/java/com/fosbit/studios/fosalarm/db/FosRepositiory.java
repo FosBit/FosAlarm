@@ -1,4 +1,4 @@
-package com.phosbit.studios.phosalarm.db;
+package com.fosbit.studios.fosalarm.db;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
@@ -6,17 +6,17 @@ import android.os.AsyncTask;
 
 import java.util.List;
 
-public class PhosRepositiory {
-    private PhosDAO mPhosDao;
+public class FosRepositiory {
+    private FosDAO mFosDao;
     private LiveData<List<Alarm>> mAlarms;
     private LiveData<List<Memory>> mMemories;
 
     // Constructor
-    PhosRepositiory( Application application ) {
-        PhosRoomDatabase db = PhosRoomDatabase.getDatabase( application );
-        mPhosDao = db.phosDAO();
-        mAlarms = mPhosDao.getAlarms();
-        mMemories = mPhosDao.getMemories();
+    FosRepositiory(Application application ) {
+        FosRoomDatabase db = FosRoomDatabase.getDatabase( application );
+        mFosDao = db.phosDAO();
+        mAlarms = mFosDao.getAlarms();
+        mMemories = mFosDao.getMemories();
     }
 
     LiveData<List<Alarm>> getAlarms() {
@@ -28,33 +28,33 @@ public class PhosRepositiory {
     }
 
     public void insertAlarms( final Alarm... alarms ) {
-        new insertAlarmsAsync( mPhosDao ).execute( alarms );
+        new insertAlarmsAsync(mFosDao).execute( alarms );
     }
 
     public void insertMemories( final Memory... memories ) {
-        new insertMemoriesAsync( mPhosDao ).execute( memories );
+        new insertMemoriesAsync(mFosDao).execute( memories );
     }
 
     public void updateAlarms( final Alarm... alarms ) {
-        new updateAlarmsAsync( mPhosDao ).execute( alarms );
+        new updateAlarmsAsync(mFosDao).execute( alarms );
     }
 
     public void updateMemories( final Memory... memories ) {
-        new updateMemoriesAsync( mPhosDao ).execute( memories );
+        new updateMemoriesAsync(mFosDao).execute( memories );
     }
 
     public void deleteAlarms( final Alarm... alarms ) {
-        new deleteAlarmsAsync( mPhosDao ).execute( alarms );
+        new deleteAlarmsAsync(mFosDao).execute( alarms );
     }
 
     public void deleteMemories( final Memory... memories) {
-        new deleteMemoriesAsync( mPhosDao ).execute( memories );
+        new deleteMemoriesAsync(mFosDao).execute( memories );
     }
 
     public static class insertAlarmsAsync extends AsyncTask<Alarm, Void, Void> {
-        private PhosDAO mAsyncTaskDao;
+        private FosDAO mAsyncTaskDao;
 
-        insertAlarmsAsync( PhosDAO dao ) {
+        insertAlarmsAsync( FosDAO dao ) {
             mAsyncTaskDao = dao;
         }
 
@@ -66,9 +66,9 @@ public class PhosRepositiory {
     }
 
     public static class insertMemoriesAsync extends AsyncTask<Memory, Void, Void> {
-        private PhosDAO mAsyncTaskDao;
+        private FosDAO mAsyncTaskDao;
 
-        insertMemoriesAsync( PhosDAO dao ) {
+        insertMemoriesAsync( FosDAO dao ) {
             mAsyncTaskDao = dao;
         }
 
@@ -80,9 +80,9 @@ public class PhosRepositiory {
     }
 
     public static class updateAlarmsAsync extends AsyncTask<Alarm, Void, Void> {
-        private PhosDAO mAsyncTaskDao;
+        private FosDAO mAsyncTaskDao;
 
-        updateAlarmsAsync( PhosDAO dao ) {
+        updateAlarmsAsync( FosDAO dao ) {
             mAsyncTaskDao = dao;
         }
 
@@ -94,9 +94,9 @@ public class PhosRepositiory {
     }
 
     public static class updateMemoriesAsync extends AsyncTask<Memory, Void, Void> {
-        private PhosDAO mAsyncTaskDao;
+        private FosDAO mAsyncTaskDao;
 
-        updateMemoriesAsync( PhosDAO dao ) {
+        updateMemoriesAsync( FosDAO dao ) {
             mAsyncTaskDao = dao;
         }
 
@@ -108,9 +108,9 @@ public class PhosRepositiory {
     }
 
     public static class deleteAlarmsAsync extends AsyncTask<Alarm, Void, Void> {
-        private PhosDAO mAsyncTaskDao;
+        private FosDAO mAsyncTaskDao;
 
-        deleteAlarmsAsync( PhosDAO dao ) {
+        deleteAlarmsAsync( FosDAO dao ) {
             mAsyncTaskDao = dao;
         }
 
@@ -122,9 +122,9 @@ public class PhosRepositiory {
     }
 
     public static class deleteMemoriesAsync extends AsyncTask<Memory, Void, Void> {
-        private PhosDAO mAsyncTaskDao;
+        private FosDAO mAsyncTaskDao;
 
-        deleteMemoriesAsync( PhosDAO dao ) {
+        deleteMemoriesAsync( FosDAO dao ) {
             mAsyncTaskDao = dao;
         }
 

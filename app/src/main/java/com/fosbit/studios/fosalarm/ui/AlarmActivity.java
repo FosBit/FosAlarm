@@ -1,4 +1,4 @@
-package com.phosbit.studios.phosalarm.ui;
+package com.fosbit.studios.fosalarm.ui;
 
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 
-import com.phosbit.studios.phosalarm.R;
+import com.fosbit.studios.fosalarm.R;
 
 public class AlarmActivity extends AppCompatActivity {
 

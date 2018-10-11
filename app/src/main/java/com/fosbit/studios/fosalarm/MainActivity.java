@@ -1,4 +1,4 @@
-package com.phosbit.studios.phosalarm;
+package com.fosbit.studios.fosalarm;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -24,12 +24,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TimePicker;
 
-import com.phosbit.studios.phosalarm.db.Alarm;
-import com.phosbit.studios.phosalarm.db.Memory;
-import com.phosbit.studios.phosalarm.db.PhosViewModel;
-import com.phosbit.studios.phosalarm.ui.EditMemoryActivity;
-import com.phosbit.studios.phosalarm.ui.MemoryBankFragment;
-import com.phosbit.studios.phosalarm.ui.MyAlarmFragment;
+import com.fosbit.studios.fosalarm.db.Alarm;
+import com.fosbit.studios.fosalarm.db.Memory;
+import com.fosbit.studios.fosalarm.db.FosViewModel;
+import com.fosbit.studios.fosalarm.ui.EditMemoryActivity;
+import com.fosbit.studios.fosalarm.ui.MemoryBankFragment;
+import com.fosbit.studios.fosalarm.ui.MyAlarmFragment;
 
 import java.util.Calendar;
 import java.util.List;
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity
     private DrawerLayout m_drawer;
     private NavigationView m_nvDrawer;
     private static String LOG_TAG = "CardViewActivity";
-    private PhosViewModel mPhosViewModel;
+    private FosViewModel mFosViewModel;
     private MyAlarmFragment alarmFragment;
     private MemoryBankFragment memoryBankFragment;
 
@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity
          * the ViewModel persists. When the activity is re-created, the ViewModelProviders
          * return the existing ViewModel.
          */
-        mPhosViewModel = ViewModelProviders.of( this ).get( PhosViewModel.class );
+        mFosViewModel = ViewModelProviders.of( this ).get( FosViewModel.class );
 
         //Instantiate Fragments
         alarmFragment = MyAlarmFragment.newInstance();
@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity
         // Add an observer on the LiveData returned by getAlarms and getMemories.
         // The onChanged() method fires when the observed data changes and the activity is
         // in the foreground.
-        mPhosViewModel.getAlarms().observe(this, new Observer<List<Alarm>>() {
+        mFosViewModel.getAlarms().observe(this, new Observer<List<Alarm>>() {
             @Override
             public void onChanged(@Nullable final List<Alarm> alarms) {
                 FragmentManager fragmentManager = getSupportFragmentManager();
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        mPhosViewModel.getMemories().observe(this, new Observer<List<Memory>>() {
+        mFosViewModel.getMemories().observe(this, new Observer<List<Memory>>() {
             @Override
             public void onChanged(@Nullable final List<Memory> memories) {
                 FragmentManager fragmentManager = getSupportFragmentManager();
@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity
                                             Alarm alarm = new Alarm(UUID.randomUUID().toString(),
                                                     Calendar.getInstance().getTimeInMillis(),
                                                     true, "1");
-                                            mPhosViewModel.insertAlarms(alarm);
+                                            mFosViewModel.insertAlarms(alarm);
                                         }
                                     },
                                     Calendar.getInstance().get(Calendar.HOUR_OF_DAY),

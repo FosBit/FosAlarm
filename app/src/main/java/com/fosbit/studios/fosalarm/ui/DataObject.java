@@ -1,4 +1,4 @@
-package com.phosbit.studios.phosalarm.ui;
+package com.fosbit.studios.fosalarm.ui;
 
 /**
  * Created by Anthony on 11/12/2017.

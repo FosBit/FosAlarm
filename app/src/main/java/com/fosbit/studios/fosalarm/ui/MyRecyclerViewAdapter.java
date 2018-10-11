@@ -1,4 +1,4 @@
-package com.phosbit.studios.phosalarm.ui;
+package com.fosbit.studios.fosalarm.ui;
 
 /**
  * Created by Anthony on 11/12/2017.
@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.phosbit.studios.phosalarm.R;
+import com.fosbit.studios.fosalarm.R;
 
 import java.util.ArrayList;
 

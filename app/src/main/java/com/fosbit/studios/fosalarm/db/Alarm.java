@@ -1,4 +1,4 @@
-package com.phosbit.studios.phosalarm.db;
+package com.fosbit.studios.fosalarm.db;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;

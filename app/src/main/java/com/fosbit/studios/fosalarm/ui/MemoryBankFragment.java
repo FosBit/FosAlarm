@@ -1,4 +1,4 @@
-package com.phosbit.studios.phosalarm.ui;
+package com.fosbit.studios.fosalarm.ui;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -11,9 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.phosbit.studios.phosalarm.R;
-import com.phosbit.studios.phosalarm.db.Memory;
-import com.phosbit.studios.phosalarm.db.PhosViewModel;
+import com.fosbit.studios.fosalarm.R;
+import com.fosbit.studios.fosalarm.db.Memory;
+import com.fosbit.studios.fosalarm.db.FosViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +33,7 @@ public class MemoryBankFragment extends Fragment
     private RecyclerView rv;
     private View mbView;
     private boolean isInitialized;
-    private PhosViewModel mPhosViewModel;
+    private FosViewModel mFosViewModel;
 
     private OnFragmentInteractionListener mListener;
 
@@ -52,8 +52,8 @@ public class MemoryBankFragment extends Fragment
     @Override
     public void onCreate( Bundle savedInstanceState ) {
         super.onCreate(savedInstanceState);
-        if (mPhosViewModel == null) {
-            mPhosViewModel = ViewModelProviders.of(getActivity()).get(PhosViewModel.class);
+        if (mFosViewModel == null) {
+            mFosViewModel = ViewModelProviders.of(getActivity()).get(FosViewModel.class);
         }
     }
 
@@ -132,7 +132,7 @@ public class MemoryBankFragment extends Fragment
 
     private void initializeAdapter()
     {
-        MemoryBankRVAdapter adapter = new MemoryBankRVAdapter( this.memories, mPhosViewModel );
+        MemoryBankRVAdapter adapter = new MemoryBankRVAdapter( this.memories, mFosViewModel);
         rv.setAdapter( adapter );
     }
 }

@@ -1,4 +1,4 @@
-package com.phosbit.studios.phosalarm.ui;
+package com.fosbit.studios.fosalarm.ui;
 
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
@@ -12,9 +12,9 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.phosbit.studios.phosalarm.R;
-import com.phosbit.studios.phosalarm.db.Alarm;
-import com.phosbit.studios.phosalarm.db.PhosViewModel;
+import com.fosbit.studios.fosalarm.R;
+import com.fosbit.studios.fosalarm.db.Alarm;
+import com.fosbit.studios.fosalarm.db.FosViewModel;
 
 import java.util.Calendar;
 import java.util.List;
@@ -51,10 +51,10 @@ public class AlarmRVAdapter extends RecyclerView.Adapter< AlarmRVAdapter.AlarmsV
     }
 
     List<Alarm> alarms;
-    PhosViewModel viewModel;
+    FosViewModel viewModel;
 
     // Provide a suitable constructor
-    AlarmRVAdapter( List<Alarm> alarms, PhosViewModel viewModel )
+    AlarmRVAdapter( List<Alarm> alarms, FosViewModel viewModel )
     {
         this.alarms = alarms;
         this.viewModel = viewModel;
