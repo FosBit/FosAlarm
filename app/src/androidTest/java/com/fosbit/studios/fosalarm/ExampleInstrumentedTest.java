@@ -1,4 +1,4 @@
-package com.phosbit.studios.phosalarm;
+package com.fosbit.studios.fosalarm;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.phosbit.studios.phosalarm", appContext.getPackageName());
+        assertEquals("com.fosbit.studios.fosalarm", appContext.getPackageName());
     }
 }

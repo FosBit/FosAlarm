@@ -1,12 +1,12 @@
-package com.phosbit.studios.phosalarm;
+package com.fosbit.studios.fosalarm;
 
 import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.phosbit.studios.phosalarm.db.Alarm;
-import com.phosbit.studios.phosalarm.db.PhosRoomDatabase;
+import com.fosbit.studios.fosalarm.db.Alarm;
+import com.fosbit.studios.fosalarm.db.FosRoomDatabase;
 
 import org.junit.After;
 import org.junit.Before;
@@ -21,8 +21,8 @@ import java.util.UUID;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 @RunWith(AndroidJUnit4.class)
-public class PhosDAOTest {
-    private PhosRoomDatabase mPhosDb;
+public class FosDAOTest {
+    private FosRoomDatabase mPhosDb;
 
     @Before
     public void createDb() {
@@ -31,7 +31,7 @@ public class PhosDAOTest {
          * (e.g. a test input for one of your tests) then call getContext().
          */
         Context context = InstrumentationRegistry.getContext();
-        mPhosDb = Room.inMemoryDatabaseBuilder(context, PhosRoomDatabase.class).build();
+        mPhosDb = Room.inMemoryDatabaseBuilder(context, FosRoomDatabase.class).build();
     }
 
     @After

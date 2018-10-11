@@ -1,4 +1,4 @@
-package com.phosbit.studios.phosalarm;
+package com.fosbit.studios.fosalarm;
 
 import org.junit.Test;
 
