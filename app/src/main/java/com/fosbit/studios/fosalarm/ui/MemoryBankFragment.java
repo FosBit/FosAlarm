@@ -51,9 +51,9 @@ public class MemoryBankFragment extends Fragment
 
     @Override
     public void onCreate( Bundle savedInstanceState ) {
-        super.onCreate(savedInstanceState);
+        super.onCreate( savedInstanceState );
         if (mFosViewModel == null) {
-            mFosViewModel = ViewModelProviders.of(getActivity()).get(FosViewModel.class);
+            mFosViewModel = ViewModelProviders.of( getActivity() ).get( FosViewModel.class );
         }
     }
 
@@ -132,7 +132,7 @@ public class MemoryBankFragment extends Fragment
 
     private void initializeAdapter()
     {
-        MemoryBankRVAdapter adapter = new MemoryBankRVAdapter( this.memories, mFosViewModel);
+        MemoryBankRVAdapter adapter = new MemoryBankRVAdapter( this.memories, mFosViewModel );
         rv.setAdapter( adapter );
     }
 }

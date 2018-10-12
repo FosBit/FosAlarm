@@ -10,4 +10,7 @@
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="title_activity_alarm">AlarmActivity</string>
+    <string name="memory_select">Memory:</string>
+    <string name="repeat">Repeat</string>
+    <string name="set">Set</string>
 </resources>

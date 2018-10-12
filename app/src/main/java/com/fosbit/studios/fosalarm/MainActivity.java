@@ -1,7 +1,5 @@
 package com.fosbit.studios.fosalarm;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -27,22 +25,21 @@ import android.widget.TimePicker;
 import com.fosbit.studios.fosalarm.db.Alarm;
 import com.fosbit.studios.fosalarm.db.Memory;
 import com.fosbit.studios.fosalarm.db.FosViewModel;
+import com.fosbit.studios.fosalarm.ui.EditAlarmActivity;
 import com.fosbit.studios.fosalarm.ui.EditMemoryActivity;
 import com.fosbit.studios.fosalarm.ui.MemoryBankFragment;
 import com.fosbit.studios.fosalarm.ui.MyAlarmFragment;
 
 import java.util.Calendar;
 import java.util.List;
-import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity
         implements MyAlarmFragment.OnFragmentInteractionListener,
                    MemoryBankFragment.OnFragmentInteractionListener
 {
-
     private DrawerLayout m_drawer;
     private NavigationView m_nvDrawer;
-    private static String LOG_TAG = "CardViewActivity";
+    private static String LOG_TAG = "FosAlarm";
     private FosViewModel mFosViewModel;
     private MyAlarmFragment alarmFragment;
     private MemoryBankFragment memoryBankFragment;
@@ -51,6 +48,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate( Bundle savedInstanceState )
     {
         super.onCreate( savedInstanceState );
+        setContentView( R.layout.activity_main );
 
         /*
          * Use ViewModelProviders to associate your ViewModel with your UI controller.
@@ -94,7 +92,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        setContentView( R.layout.activity_main );
         Toolbar toolbar = ( Toolbar ) findViewById( R.id.toolbar );
         setSupportActionBar( toolbar );
 
@@ -112,26 +109,21 @@ public class MainActivity extends AppCompatActivity
                             new TimePickerDialog(MainActivity.this,
                                     new TimePickerDialog.OnTimeSetListener() {
                                         @Override
-                                        public void onTimeSet(TimePicker view,
-                                                              int hourOfDay,
-                                                              int minute) {
-                                            Intent myIntent = new Intent(MainActivity.this, AlarmReceiver.class);
-                                            PendingIntent pendingIntent = PendingIntent.getBroadcast(getBaseContext(),
-                                                    0,
-                                                    myIntent,
-                                                    0);
-                                            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-                                            alarmManager.set(AlarmManager.RTC_WAKEUP,
-                                                    Calendar.getInstance().getTimeInMillis(),
-                                                    pendingIntent);
-                                            Alarm alarm = new Alarm(UUID.randomUUID().toString(),
-                                                    Calendar.getInstance().getTimeInMillis(),
-                                                    true, "1");
-                                            mFosViewModel.insertAlarms(alarm);
+                                        public void onTimeSet( TimePicker view,
+                                                               int hourOfDay,
+                                                               int minute ) {
+                                            // Start edit activity
+                                            Intent intent = new Intent( MainActivity.this, EditAlarmActivity.class );
+                                            Bundle bundle = new Bundle();
+                                            bundle.putBoolean( "ISNEW", true );
+                                            bundle.putInt( "HOUROFDAY", hourOfDay );
+                                            bundle.putInt( "MINUTE", minute );
+                                            intent.putExtras( bundle );
+                                            startActivity( intent );
                                         }
                                     },
-                                    Calendar.getInstance().get(Calendar.HOUR_OF_DAY),
-                                    Calendar.getInstance().get(Calendar.MINUTE),
+                                    Calendar.getInstance().get( Calendar.HOUR_OF_DAY ),
+                                    Calendar.getInstance().get( Calendar.MINUTE ),
                                     false); // 'false' for 12-hour times
                     timePicker.show();
                 }
@@ -160,7 +152,6 @@ public class MainActivity extends AppCompatActivity
         setupDrawerContent( m_nvDrawer );
         // Default item is nav_alarm
         selectDrawerItem( m_nvDrawer.getMenu().getItem(0) );
-
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle( this,
                                                                   m_drawer,
                                                                   toolbar,

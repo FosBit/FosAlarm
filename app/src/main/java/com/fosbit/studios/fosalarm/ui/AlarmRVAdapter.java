@@ -1,6 +1,9 @@
 package com.fosbit.studios.fosalarm.ui;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -12,12 +15,15 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.fosbit.studios.fosalarm.AlarmReceiver;
 import com.fosbit.studios.fosalarm.R;
 import com.fosbit.studios.fosalarm.db.Alarm;
 import com.fosbit.studios.fosalarm.db.FosViewModel;
 
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Aaron on 11/27/2017.
@@ -43,7 +49,7 @@ public class AlarmRVAdapter extends RecyclerView.Adapter< AlarmRVAdapter.AlarmsV
             super( itemView );
             // Find views to put in the references
             cv = ( CardView ) itemView.findViewById( R.id.memory_cardview );
-            alarmName = ( TextView ) itemView.findViewById( R.id.alarm_time );
+            alarmName = ( TextView ) itemView.findViewById( R.id.alarm_time);
             alarmEdit = ( Button ) itemView.findViewById( R.id.alarm_edit_button );
             alarmDelete = ( Button ) itemView.findViewById( R.id.alarm_delete_button );
             alarmSwitch = ( Switch ) itemView.findViewById( R.id.alarm_switch );
@@ -61,7 +67,7 @@ public class AlarmRVAdapter extends RecyclerView.Adapter< AlarmRVAdapter.AlarmsV
     }
 
     public void updateAlarms( List<Alarm> alarms ) {
-        if ( alarms != null && alarms.size() > 0 ) {
+        if ( alarms != null && alarms.size() >= 0 ) {
             this.alarms.clear();
             this.alarms.addAll( alarms );
             notifyDataSetChanged();
@@ -90,9 +96,19 @@ public class AlarmRVAdapter extends RecyclerView.Adapter< AlarmRVAdapter.AlarmsV
         calendar.setTimeInMillis( alarms.get( i ).getTimeOfDay() );
         int hour = calendar.get( Calendar.HOUR_OF_DAY );
         int minute = calendar.get( Calendar.MINUTE );
-        String time = Integer.toString( hour ) + ":" + Integer.toString( minute );
 
-        holder.alarmName.setText( time );
+        if ( ( 12 - hour ) > 0 ) {
+            if ( hour == 0 ) {
+                holder.alarmName.setText( new DecimalFormat( "00" ).format( hour + 12 )
+                        + ":" + new DecimalFormat("00" ).format( minute ) + " AM" );
+            } else {
+                holder.alarmName.setText( new DecimalFormat( "00" ).format( hour )
+                        + ":" + new DecimalFormat(  "00" ).format( minute ) + " AM" );
+            }
+        } else {
+            holder.alarmName.setText( new DecimalFormat( "00" ).format( hour - 12 )
+                    + ":" + new DecimalFormat( "00" ).format( minute ) + " PM");
+        }
         holder.alarmSwitch.setChecked( alarms.get( i ).getStatus() );
 
         // Set a click listener for alarm edit
@@ -101,8 +117,19 @@ public class AlarmRVAdapter extends RecyclerView.Adapter< AlarmRVAdapter.AlarmsV
             @Override
             public void onClick( View v )
             {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis( alarms.get( i ).getTimeOfDay() );
+                int hour = calendar.get( Calendar.HOUR_OF_DAY );
+                int minute = calendar.get( Calendar.MINUTE );
                 // Start edit activity
                 Intent intent = new Intent( v.getContext(), EditAlarmActivity.class );
+                Bundle bundle = new Bundle();
+                bundle.putBoolean( "ISNEW", false );
+                bundle.putBoolean( "STATUS", alarms.get( i ).getStatus() );
+                bundle.putString( "ALARMID", alarms.get( i ).getAlarmID() );
+                bundle.putInt( "HOUROFDAY", hour );
+                bundle.putInt( "MINUTE", minute );
+                intent.putExtras( bundle );
                 v.getContext().startActivity( intent );
             }
         });
@@ -114,6 +141,23 @@ public class AlarmRVAdapter extends RecyclerView.Adapter< AlarmRVAdapter.AlarmsV
             {
                 // Remove alarm from database
                 viewModel.deleteAlarms( alarms.get( i ) );
+
+                // Build requestCode from unique alarm ID (should probably find a better way to identify)
+                int requestCode = 0;
+                for ( int j = 0; j < alarms.get( i ).getAlarmID().length(); j++ ) {
+                    requestCode += Character.getNumericValue( alarms.get( i ).getAlarmID().charAt( j ) );
+                }
+                Intent myIntent = new Intent( viewModel.getApplication().getApplicationContext(), AlarmReceiver.class );
+                PendingIntent pendingIntent = PendingIntent.getBroadcast( viewModel.getApplication().getBaseContext(),
+                        requestCode,
+                        myIntent,
+                        0 );
+                AlarmManager alarmManager =
+                        ( AlarmManager ) viewModel.getApplication().getSystemService( viewModel.getApplication().ALARM_SERVICE );
+                // Cancel pendingIntent that matches previously set pending intent
+                alarmManager.cancel(pendingIntent);
+                pendingIntent.cancel();
+
                 // Show removed notification
                 Snackbar.make( v, "Alarm Removed.", Snackbar.LENGTH_LONG ).show();
             }
@@ -123,6 +167,28 @@ public class AlarmRVAdapter extends RecyclerView.Adapter< AlarmRVAdapter.AlarmsV
         holder.alarmSwitch.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged( CompoundButton buttonView, boolean isChecked ) {
                 alarms.get( i ).setStatus( isChecked );
+                // Build requestCode from unique alarm ID (should probably find a better way to identify)
+                int requestCode = 0;
+                for ( int j = 0; j < alarms.get( i ).getAlarmID().length(); j++ ) {
+                    requestCode += Character.getNumericValue( alarms.get( i ).getAlarmID().charAt( j ) );
+                }
+                Intent myIntent = new Intent( viewModel.getApplication().getApplicationContext(), AlarmReceiver.class );
+                PendingIntent pendingIntent = PendingIntent.getBroadcast( viewModel.getApplication().getBaseContext(),
+                        requestCode,
+                        myIntent,
+                        0 );
+                AlarmManager alarmManager =
+                        ( AlarmManager ) viewModel.getApplication().getSystemService( viewModel.getApplication().ALARM_SERVICE );
+                if ( !isChecked ) {
+                    // Cancel pendingIntent that matches previously set pending intent
+                    alarmManager.cancel(pendingIntent);
+                    pendingIntent.cancel();
+                } else {
+                    // Set alarm with pendingIntent
+                    alarmManager.set(AlarmManager.RTC_WAKEUP,
+                            alarms.get( i ).getTimeOfDay(),
+                            pendingIntent);
+                }
                 viewModel.updateAlarms( alarms.get( i ) );
             }
         });
