@@ -13,4 +13,6 @@
     <string name="memory_select">Memory:</string>
     <string name="repeat">Repeat</string>
     <string name="set">Set</string>
+    <string name="memory_title">Memory Title</string>
+    <string name="memory_description">What do you want to memorize?</string>
 </resources>

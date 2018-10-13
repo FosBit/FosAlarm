@@ -69,26 +69,14 @@ public class MainActivity extends AppCompatActivity
         mFosViewModel.getAlarms().observe(this, new Observer<List<Alarm>>() {
             @Override
             public void onChanged(@Nullable final List<Alarm> alarms) {
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                MyAlarmFragment fmt = ( MyAlarmFragment ) fragmentManager.findFragmentByTag( "alarm_fragment" );
-                if ( fmt != null ){
-                    if ( fmt.isVisible() ) {
-                        fmt.updateData( alarms );
-                    }
-                }
+                alarmFragment.updateData( alarms );
             }
         });
 
         mFosViewModel.getMemories().observe(this, new Observer<List<Memory>>() {
             @Override
             public void onChanged(@Nullable final List<Memory> memories) {
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                MemoryBankFragment fmt = ( MemoryBankFragment ) fragmentManager.findFragmentByTag( "memory_fragment" );
-                if ( fmt != null ){
-                    if ( fmt.isVisible() ) {
-                        fmt.updateData( memories );
-                    }
-                }
+                memoryBankFragment.updateData( memories );
             }
         });
 
@@ -102,7 +90,11 @@ public class MainActivity extends AppCompatActivity
             public void onClick( View v )
             {
                 if ( getTitle().toString().equals( "Memory Bank" ) ) {
+                    // Start edit memory activity
                     Intent intent = new Intent( v.getContext(), EditMemoryActivity.class );
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean( "ISNEW", true );
+                    intent.putExtras( bundle );
                     v.getContext().startActivity( intent );
                 } else {
                     TimePickerDialog timePicker =
@@ -112,14 +104,14 @@ public class MainActivity extends AppCompatActivity
                                         public void onTimeSet( TimePicker view,
                                                                int hourOfDay,
                                                                int minute ) {
-                                            // Start edit activity
-                                            Intent intent = new Intent( MainActivity.this, EditAlarmActivity.class );
+                                            // Start edit alarm activity
+                                            Intent intent = new Intent( view.getContext(), EditAlarmActivity.class );
                                             Bundle bundle = new Bundle();
                                             bundle.putBoolean( "ISNEW", true );
                                             bundle.putInt( "HOUROFDAY", hourOfDay );
                                             bundle.putInt( "MINUTE", minute );
                                             intent.putExtras( bundle );
-                                            startActivity( intent );
+                                            view.getContext().startActivity( intent );
                                         }
                                     },
                                     Calendar.getInstance().get( Calendar.HOUR_OF_DAY ),

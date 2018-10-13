@@ -21,6 +21,7 @@ import com.fosbit.studios.fosalarm.db.Alarm;
 import com.fosbit.studios.fosalarm.db.FosViewModel;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -62,7 +63,8 @@ public class AlarmRVAdapter extends RecyclerView.Adapter< AlarmRVAdapter.AlarmsV
     // Provide a suitable constructor
     AlarmRVAdapter( List<Alarm> alarms, FosViewModel viewModel )
     {
-        this.alarms = alarms;
+        this.alarms = new ArrayList<>();
+        updateAlarms( alarms );
         this.viewModel = viewModel;
     }
 
@@ -127,6 +129,7 @@ public class AlarmRVAdapter extends RecyclerView.Adapter< AlarmRVAdapter.AlarmsV
                 bundle.putBoolean( "ISNEW", false );
                 bundle.putBoolean( "STATUS", alarms.get( i ).getStatus() );
                 bundle.putString( "ALARMID", alarms.get( i ).getAlarmID() );
+                bundle.putString( "MEMORYID", alarms.get( i ).getMemoryID() );
                 bundle.putInt( "HOUROFDAY", hour );
                 bundle.putInt( "MINUTE", minute );
                 intent.putExtras( bundle );

@@ -1,6 +1,7 @@
 package com.fosbit.studios.fosalarm.ui;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +15,7 @@ import com.fosbit.studios.fosalarm.R;
 import com.fosbit.studios.fosalarm.db.Memory;
 import com.fosbit.studios.fosalarm.db.FosViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,7 +42,7 @@ public class MemoryBankRVAdapter extends RecyclerView.Adapter< MemoryBankRVAdapt
             super( itemView );
             // Find views to put in the references
             cv = ( CardView ) itemView.findViewById( R.id.memory_cardview );
-            memoryName = ( TextView ) itemView.findViewById( R.id.memory_title );
+            memoryName = ( TextView ) itemView.findViewById( R.id.memory_title_text);
             memoryDesc = ( TextView ) itemView.findViewById( R.id.memory_description );
             memoryEdit = ( Button ) itemView.findViewById( R.id.memory_edit_button );
             memoryDelete = ( Button ) itemView.findViewById( R.id.memory_delete_button );
@@ -53,12 +55,13 @@ public class MemoryBankRVAdapter extends RecyclerView.Adapter< MemoryBankRVAdapt
     // Provide a suitable constructor
     MemoryBankRVAdapter( List<Memory> memories, FosViewModel viewModel )
     {
-        this.memories = memories;
+        this.memories = new ArrayList<>();
+        updateMemories( memories );
         this.viewModel = viewModel;
     }
 
     public void updateMemories( List<Memory> memories ) {
-        if ( memories != null && memories.size() > 0 ) {
+        if ( memories != null && memories.size() >= 0 ) {
             this.memories.clear();
             this.memories.addAll( memories );
             notifyDataSetChanged();
@@ -95,6 +98,12 @@ public class MemoryBankRVAdapter extends RecyclerView.Adapter< MemoryBankRVAdapt
             {
                 // Start edit activity
                 Intent intent = new Intent( v.getContext(), EditMemoryActivity.class );
+                Bundle bundle = new Bundle();
+                bundle.putBoolean( "ISNEW", false );
+                bundle.putString( "MEMORYID", memories.get( i ).getMemoryID() );
+                bundle.putString( "TITLE", memories.get( i ).getTitle() );
+                bundle.putString( "DESCRIPTION", memories.get( i ).getMessage() );
+                intent.putExtras( bundle );
                 v.getContext().startActivity( intent );
             }
         });
@@ -105,20 +114,12 @@ public class MemoryBankRVAdapter extends RecyclerView.Adapter< MemoryBankRVAdapt
             @Override
             public void onClick( View v )
             {
-                // Get the clicked item label
-                String memoryTitle = memories.get( i ).getTitle();
-                // Remove the item on delete button click
-                memories.remove( i );
-                // Notify any registered observers that the item previously located at position
-                // has been removed from the data set. The items previously located at and
-                // after position may now be found at oldPosition - 1.
-                notifyItemRemoved( i);
-                // Notify any registered observers that the itemCount items starting at
-                // position positionStart have changed.
-                notifyItemRangeChanged( i, memories.size());
-
+                //remove memory from database
+                viewModel.deleteMemories( memories.get( i ) );
                 // Show the removed item title
-                Snackbar.make( v, "Removed: " + memoryTitle, Snackbar.LENGTH_LONG ).show();
+                Snackbar.make( v,
+                        "Removed: " + memories.get( i ).getTitle(),
+                        Snackbar.LENGTH_LONG ).show();
             }
         });
     }
