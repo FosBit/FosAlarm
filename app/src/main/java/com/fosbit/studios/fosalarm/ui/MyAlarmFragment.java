@@ -40,6 +40,7 @@ public class MyAlarmFragment extends Fragment
     public MyAlarmFragment()
     {
         isInitialized = false;
+        alarms = new ArrayList<>();
     }
 
     public static MyAlarmFragment newInstance()
@@ -52,6 +53,7 @@ public class MyAlarmFragment extends Fragment
     public void onCreate( Bundle savedInstanceState )
     {
         super.onCreate( savedInstanceState );
+
         if (mFosViewModel == null) {
             mFosViewModel = ViewModelProviders.of(getActivity()).get(FosViewModel.class);
         }
@@ -70,10 +72,11 @@ public class MyAlarmFragment extends Fragment
             LinearLayoutManager llm = new LinearLayoutManager( getActivity() );
             rv.setLayoutManager( llm );
             rv.setHasFixedSize( true );
-
-            alarms = new ArrayList<>();
             initializeAdapter();
             isInitialized = true;
+        } else {
+            AlarmRVAdapter adapter = ( AlarmRVAdapter  ) rv.getAdapter();
+            adapter.updateAlarms( this.alarms );
         }
         return alarmsView;
     }
@@ -128,8 +131,11 @@ public class MyAlarmFragment extends Fragment
     public void updateData( final List<Alarm> alarms )
     {
         this.alarms = alarms;
-        AlarmRVAdapter adapter = ( AlarmRVAdapter  ) rv.getAdapter();
-        adapter.updateAlarms( this.alarms );
+        // Make sure view is created before updating view
+        if ( rv != null ) {
+            AlarmRVAdapter adapter = (AlarmRVAdapter) rv.getAdapter();
+            adapter.updateAlarms(this.alarms);
+        }
     }
 
     private void initializeAdapter()

@@ -40,7 +40,7 @@ public class MemoryBankFragment extends Fragment
     public MemoryBankFragment()
     {
         isInitialized = false;
-        // Required empty public constructor
+        memories = new ArrayList<>();
     }
 
     public static MemoryBankFragment newInstance()
@@ -52,6 +52,7 @@ public class MemoryBankFragment extends Fragment
     @Override
     public void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
+
         if (mFosViewModel == null) {
             mFosViewModel = ViewModelProviders.of( getActivity() ).get( FosViewModel.class );
         }
@@ -70,10 +71,11 @@ public class MemoryBankFragment extends Fragment
             LinearLayoutManager llm = new LinearLayoutManager(getActivity());
             rv.setLayoutManager(llm);
             rv.setHasFixedSize(true);
-
-            memories = new ArrayList<>();
             initializeAdapter();
             isInitialized = true;
+        } else {
+            MemoryBankRVAdapter adapter = ( MemoryBankRVAdapter  ) rv.getAdapter();
+            adapter.updateMemories( this.memories );
         }
         return mbView;
     }
@@ -126,8 +128,11 @@ public class MemoryBankFragment extends Fragment
     public void updateData( final List<Memory> memories )
     {
         this.memories = memories;
-        MemoryBankRVAdapter adapter = ( MemoryBankRVAdapter  ) rv.getAdapter();
-        adapter.updateMemories( this.memories );
+        // Make sure view is created before updating view
+        if ( rv != null ) {
+            MemoryBankRVAdapter adapter = ( MemoryBankRVAdapter ) rv.getAdapter();
+            adapter.updateMemories( this.memories );
+        }
     }
 
     private void initializeAdapter()
