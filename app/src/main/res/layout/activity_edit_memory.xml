@@ -50,7 +50,7 @@
         app:layout_constraintStart_toStartOf="parent"/>
 
     <EditText
-        android:id="@+id/memory_title_text"
+        android:id="@+id/memory_description_text"
         android:layout_width="355dp"
         android:layout_height="102dp"
         android:layout_marginStart="16dp"
@@ -64,10 +64,10 @@
         android:singleLine="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/memory_description_text"/>
+        app:layout_constraintTop_toBottomOf="@+id/memory_title_text"/>
 
     <EditText
-        android:id="@+id/memory_description_text"
+        android:id="@+id/memory_title_text"
         android:layout_width="353dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
