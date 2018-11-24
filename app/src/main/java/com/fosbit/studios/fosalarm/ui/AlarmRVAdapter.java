@@ -23,6 +23,7 @@ import com.fosbit.studios.fosalarm.db.FosViewModel;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -94,10 +95,8 @@ public class AlarmRVAdapter extends RecyclerView.Adapter< AlarmRVAdapter.AlarmsV
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder( AlarmsViewHolder holder, final int i ) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis( alarms.get( i ).getTimeOfDay() );
-        int hour = calendar.get( Calendar.HOUR_OF_DAY );
-        int minute = calendar.get( Calendar.MINUTE );
+        long hour = TimeUnit.MILLISECONDS.toHours( alarms.get( i ).getTimeOfDay() );
+        long minute = TimeUnit.MILLISECONDS.toMinutes( alarms.get( i ).getTimeOfDay() - TimeUnit.HOURS.toMillis( hour ) );
 
         if ( ( 12 - hour ) > 0 ) {
             if ( hour == 0 ) {
@@ -119,10 +118,8 @@ public class AlarmRVAdapter extends RecyclerView.Adapter< AlarmRVAdapter.AlarmsV
             @Override
             public void onClick( View v )
             {
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTimeInMillis( alarms.get( i ).getTimeOfDay() );
-                int hour = calendar.get( Calendar.HOUR_OF_DAY );
-                int minute = calendar.get( Calendar.MINUTE );
+                long hour = TimeUnit.MILLISECONDS.toHours( alarms.get( i ).getTimeOfDay() );
+                long minute = TimeUnit.MILLISECONDS.toMinutes( alarms.get( i ).getTimeOfDay() - TimeUnit.HOURS.toMillis( hour ) );
                 // Start edit activity
                 Intent intent = new Intent( v.getContext(), EditAlarmActivity.class );
                 Bundle bundle = new Bundle();
@@ -130,8 +127,8 @@ public class AlarmRVAdapter extends RecyclerView.Adapter< AlarmRVAdapter.AlarmsV
                 bundle.putBoolean( "STATUS", alarms.get( i ).getStatus() );
                 bundle.putString( "ALARMID", alarms.get( i ).getAlarmID() );
                 bundle.putString( "MEMORYID", alarms.get( i ).getMemoryID() );
-                bundle.putInt( "HOUROFDAY", hour );
-                bundle.putInt( "MINUTE", minute );
+                bundle.putLong( "HOUROFDAY", hour );
+                bundle.putLong( "MINUTE", minute );
                 intent.putExtras( bundle );
                 v.getContext().startActivity( intent );
             }
@@ -185,11 +182,15 @@ public class AlarmRVAdapter extends RecyclerView.Adapter< AlarmRVAdapter.AlarmsV
                 if ( !isChecked ) {
                     // Cancel pendingIntent that matches previously set pending intent
                     alarmManager.cancel(pendingIntent);
-                    pendingIntent.cancel();
                 } else {
+                    Calendar today = Calendar.getInstance();
+                    today.set(Calendar.MILLISECOND, 0);
+                    today.set(Calendar.SECOND, 0);
+                    today.set(Calendar.MINUTE, 0);
+                    today.set(Calendar.HOUR_OF_DAY, 0);
                     // Set alarm with pendingIntent
                     alarmManager.set(AlarmManager.RTC_WAKEUP,
-                            alarms.get( i ).getTimeOfDay(),
+                            today.getTimeInMillis() + alarms.get( i ).getTimeOfDay(),
                             pendingIntent);
                 }
                 viewModel.updateAlarms( alarms.get( i ) );

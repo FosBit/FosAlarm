@@ -108,8 +108,8 @@ public class MainActivity extends AppCompatActivity
                                             Intent intent = new Intent( view.getContext(), EditAlarmActivity.class );
                                             Bundle bundle = new Bundle();
                                             bundle.putBoolean( "ISNEW", true );
-                                            bundle.putInt( "HOUROFDAY", hourOfDay );
-                                            bundle.putInt( "MINUTE", minute );
+                                            bundle.putLong( "HOUROFDAY", Long.valueOf(hourOfDay) );
+                                            bundle.putLong( "MINUTE", Long.valueOf(minute) );
                                             intent.putExtras( bundle );
                                             view.getContext().startActivity( intent );
                                         }

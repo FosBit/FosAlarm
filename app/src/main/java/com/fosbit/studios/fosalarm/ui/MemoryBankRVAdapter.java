@@ -42,7 +42,7 @@ public class MemoryBankRVAdapter extends RecyclerView.Adapter< MemoryBankRVAdapt
             super( itemView );
             // Find views to put in the references
             cv = ( CardView ) itemView.findViewById( R.id.memory_cardview );
-            memoryName = ( TextView ) itemView.findViewById( R.id.memory_title_text);
+            memoryName = ( TextView ) itemView.findViewById( R.id.memory_title);
             memoryDesc = ( TextView ) itemView.findViewById( R.id.memory_description );
             memoryEdit = ( Button ) itemView.findViewById( R.id.memory_edit_button );
             memoryDelete = ( Button ) itemView.findViewById( R.id.memory_delete_button );

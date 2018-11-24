@@ -5,9 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.fosbit.studios.fosalarm.R;
 import com.fosbit.studios.fosalarm.db.FosViewModel;
@@ -29,8 +27,8 @@ public class EditMemoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_memory);
 
-        memoryTitle = ( EditText ) findViewById( R.id.memory_title_text);
-        memoryDescription = ( EditText ) findViewById( R.id.memory_description_text );
+        memoryTitle = ( EditText ) findViewById( R.id.memory_edit_title);
+        memoryDescription = ( EditText ) findViewById( R.id.memory_edit_description);
         memoryCancel = ( Button ) findViewById( R.id.cancel_memory_button );
         memorySave = ( Button ) findViewById( R.id.save_memory_button );
 

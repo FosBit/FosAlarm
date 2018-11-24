@@ -27,6 +27,7 @@ import com.fosbit.studios.fosalarm.db.Memory;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -44,8 +45,9 @@ public class EditAlarmActivity extends AppCompatActivity {
     boolean status;
     String alarmID;
     String memoryID;
-    int hour;
-    int minute;
+    String memoryMessage;
+    long hour;
+    long minute;
     List<Memory> memoriesList;
 
     @Override
@@ -56,7 +58,6 @@ public class EditAlarmActivity extends AppCompatActivity {
         alarmTimeCV = (CardView) findViewById( R.id.alarm_time_cardview );
         selectedMemoryCV = ( CardView ) findViewById( R.id.memory_select_cardview );
         selectedMemory = ( TextView ) findViewById( R.id.selected_memory );
-        alarmRepeat = (CheckBox) findViewById( R.id.alarm_repeat );
         alarmCancel = ( Button ) findViewById( R.id.cancel_alarm_button );
         alarmSet = ( Button ) findViewById( R.id.set_alarm_button );
 
@@ -72,8 +73,8 @@ public class EditAlarmActivity extends AppCompatActivity {
             memoryID = bundle.getString( "MEMORYID" );
             status = bundle.getBoolean( "STATUS" );
         }
-        hour = bundle.getInt( "HOUROFDAY" );
-        minute = bundle.getInt( "MINUTE" );
+        hour = bundle.getLong( "HOUROFDAY" );
+        minute = bundle.getLong( "MINUTE" );
         alarmTime = ( TextView ) findViewById( R.id.alarm_edit_time );
         if ( ( 12 - hour ) > 0 ) {
             if ( hour == 0 ) {
@@ -160,6 +161,7 @@ public class EditAlarmActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int item) {
                         selectedMemory.setText( memoriesList.get( item ).getTitle() );
                         memoryID = memoriesList.get( item ).getMemoryID();
+                        memoryMessage = memoriesList.get( item ).getMessage();
                         dialog.dismiss();
                     }
                 });
@@ -190,25 +192,40 @@ public class EditAlarmActivity extends AppCompatActivity {
                         status, memoryID);
 
                 Intent myIntent = new Intent( getApplicationContext(), AlarmReceiver.class );
-                PendingIntent pendingIntent = PendingIntent.getBroadcast( getBaseContext(),
+                myIntent.putExtra( "TITLE", selectedMemory.getText().toString() );
+                myIntent.putExtra( "MESSAGE", memoryMessage );
+                myIntent.putExtra( "ALARMID", alarmID );
+                myIntent.putExtra( "TIME", TimeUnit.HOURS.toMillis( hour )
+                        + TimeUnit.MINUTES.toMillis( minute ) );
+                myIntent.putExtra( "MEMORYID", memoryID );
+                PendingIntent pendingIntent = PendingIntent.getBroadcast( getApplicationContext(),
                         requestCode,
                         myIntent,
-                        0 );
+                        PendingIntent.FLAG_UPDATE_CURRENT );
                 AlarmManager alarmManager = ( AlarmManager ) getSystemService( ALARM_SERVICE );
                 if ( isNew ) {
+                    Calendar today = Calendar.getInstance();
+                    today.set(Calendar.MILLISECOND, 0);
+                    today.set(Calendar.SECOND, 0);
+                    today.set(Calendar.MINUTE, 0);
+                    today.set(Calendar.HOUR_OF_DAY, 0);
                     // Set new alarm with pendingIntent
                     alarmManager.set( AlarmManager.RTC_WAKEUP,
-                            TimeUnit.HOURS.toMillis( hour )
+                            today.getTimeInMillis() + TimeUnit.HOURS.toMillis( hour )
                                     + TimeUnit.MINUTES.toMillis( minute ),
                             pendingIntent );
                     mFosViewModel.insertAlarms( alarm );
                 } else {
                     // Cancel pendingIntent that matches previously set pending intent
                     alarmManager.cancel( pendingIntent );
-                    pendingIntent.cancel();
                     // Re-set updated alarm with pendingIntent
+                    Calendar today = Calendar.getInstance();
+                    today.set(Calendar.MILLISECOND, 0);
+                    today.set(Calendar.SECOND, 0);
+                    today.set(Calendar.MINUTE, 0);
+                    today.set(Calendar.HOUR_OF_DAY, 0);
                     alarmManager.set( AlarmManager.RTC_WAKEUP,
-                            TimeUnit.HOURS.toMillis( hour )
+                            today.getTimeInMillis() + TimeUnit.HOURS.toMillis( hour )
                                     + TimeUnit.MINUTES.toMillis( minute ),
                             pendingIntent );
                     mFosViewModel.updateAlarms( alarm );
