@@ -192,8 +192,18 @@ public class EditAlarmActivity extends AppCompatActivity {
                         status, memoryID);
 
                 Intent myIntent = new Intent( getApplicationContext(), AlarmReceiver.class );
-                myIntent.putExtra( "TITLE", selectedMemory.getText().toString() );
-                myIntent.putExtra( "MESSAGE", memoryMessage );
+
+
+                // Just to make sure app handles edge case where no memory is selected
+                if ( memoryMessage != null ) {
+                    myIntent.putExtra( "TITLE", selectedMemory.getText().toString() );
+                    myIntent.putExtra("MESSAGE", memoryMessage);
+
+                } else {
+                    myIntent.putExtra( "TITLE", "" );
+                    myIntent.putExtra("MESSAGE", "");
+                }
+
                 myIntent.putExtra( "ALARMID", alarmID );
                 myIntent.putExtra( "TIME", TimeUnit.HOURS.toMillis( hour )
                         + TimeUnit.MINUTES.toMillis( minute ) );

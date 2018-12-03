@@ -39,18 +39,20 @@ public class AlarmActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm);
 
-        mFosViewModel = ViewModelProviders.of( this ).get( FosViewModel.class );
+        mFosViewModel = ViewModelProviders.of(this).get(FosViewModel.class);
 
-        memoryTitle = ( TextView ) findViewById( R.id.memory_title_textview);
-        memoryMessage = ( EditText ) findViewById( R.id.memory_message );
-        dismissAlarm = ( Button ) findViewById( R.id.dismiss_alarm_button );
-        dismissAlarm.setClickable( false );
+        memoryTitle = (TextView) findViewById(R.id.memory_title_textview);
+        memoryMessage = (EditText) findViewById(R.id.memory_message);
+        dismissAlarm = (Button) findViewById(R.id.dismiss_alarm_button);
 
         Bundle bundle = getIntent().getExtras();
-        memoryTitle.setText( bundle.getString( "TITLE" ) );
-        memoryValidation = bundle.getString( "MESSAGE" );
-        alarm = new Alarm( bundle.getString( "ALARMID" ), bundle.getLong( "TIME" ),
-                           false, bundle.getString( "MEMORYID" ) );
+        memoryTitle.setText(bundle.getString("TITLE"));
+        memoryValidation = bundle.getString("MESSAGE");
+        alarm = new Alarm(bundle.getString("ALARMID"), bundle.getLong("TIME"),
+                false, bundle.getString("MEMORYID"));
+        if ( !memoryValidation.isEmpty() ) {
+            dismissAlarm.setClickable( false );
+        }
 
 
         memoryMessage.addTextChangedListener(new TextWatcher() {
