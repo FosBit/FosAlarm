@@ -3,6 +3,7 @@ package com.fosbit.studios.fosalarm.ui;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
@@ -195,9 +196,19 @@ public class AlarmRVAdapter extends RecyclerView.Adapter< AlarmRVAdapter.AlarmsV
                         triggerTimeinMillis +=  TimeUnit.DAYS.toMillis(1);
                     }
                     // Set alarm with pendingIntent
-                    alarmManager.set(AlarmManager.RTC_WAKEUP,
-                            triggerTimeinMillis,
-                            pendingIntent);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        AlarmManager.AlarmClockInfo alarmClockInfo =
+                                new AlarmManager.AlarmClockInfo( triggerTimeinMillis, pendingIntent);
+                        alarmManager.setAlarmClock(alarmClockInfo, pendingIntent);
+                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        alarmManager.setExact(android.app.AlarmManager.RTC_WAKEUP,
+                                              triggerTimeinMillis,
+                                              pendingIntent);
+                    } else {
+                        alarmManager.set(AlarmManager.RTC_WAKEUP,
+                                triggerTimeinMillis,
+                                pendingIntent);
+                    }
                 }
                 viewModel.updateAlarms( alarms.get( i ) );
             }

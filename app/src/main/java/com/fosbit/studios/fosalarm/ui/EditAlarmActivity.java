@@ -8,6 +8,7 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -227,9 +228,19 @@ public class EditAlarmActivity extends AppCompatActivity {
                         triggerTimeinMillis +=  TimeUnit.DAYS.toMillis(1);
                     }
                     // Set new alarm with pendingIntent
-                    alarmManager.set( AlarmManager.RTC_WAKEUP,
-                            triggerTimeinMillis,
-                            pendingIntent );
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        AlarmManager.AlarmClockInfo alarmClockInfo =
+                                new AlarmManager.AlarmClockInfo( triggerTimeinMillis, pendingIntent);
+                        alarmManager.setAlarmClock(alarmClockInfo, pendingIntent);
+                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        alarmManager.setExact(android.app.AlarmManager.RTC_WAKEUP,
+                                triggerTimeinMillis,
+                                pendingIntent);
+                    } else {
+                        alarmManager.set(AlarmManager.RTC_WAKEUP,
+                                triggerTimeinMillis,
+                                pendingIntent);
+                    }
                     mFosViewModel.insertAlarms( alarm );
                 } else {
                     // Cancel pendingIntent that matches previously set pending intent
@@ -248,9 +259,19 @@ public class EditAlarmActivity extends AppCompatActivity {
                         triggerTimeinMillis +=  TimeUnit.DAYS.toMillis(1);
                     }
                     // Set new alarm with pendingIntent
-                    alarmManager.set( AlarmManager.RTC_WAKEUP,
-                            triggerTimeinMillis,
-                            pendingIntent );
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        AlarmManager.AlarmClockInfo alarmClockInfo =
+                                new AlarmManager.AlarmClockInfo( triggerTimeinMillis, pendingIntent);
+                        alarmManager.setAlarmClock(alarmClockInfo, pendingIntent);
+                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        alarmManager.setExact(android.app.AlarmManager.RTC_WAKEUP,
+                                triggerTimeinMillis,
+                                pendingIntent);
+                    } else {
+                        alarmManager.set(AlarmManager.RTC_WAKEUP,
+                                triggerTimeinMillis,
+                                pendingIntent);
+                    }
                     mFosViewModel.updateAlarms( alarm );
                 }
 
