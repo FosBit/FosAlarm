@@ -188,9 +188,15 @@ public class AlarmRVAdapter extends RecyclerView.Adapter< AlarmRVAdapter.AlarmsV
                     today.set(Calendar.SECOND, 0);
                     today.set(Calendar.MINUTE, 0);
                     today.set(Calendar.HOUR_OF_DAY, 0);
+                    long triggerTimeinMillis = today.getTimeInMillis()
+                            + alarms.get( i ).getTimeOfDay();
+                    // If trigger time is in the past, set to the next day
+                    if ( triggerTimeinMillis <  Calendar.getInstance().getTimeInMillis() ) {
+                        triggerTimeinMillis +=  TimeUnit.DAYS.toMillis(1);
+                    }
                     // Set alarm with pendingIntent
                     alarmManager.set(AlarmManager.RTC_WAKEUP,
-                            today.getTimeInMillis() + alarms.get( i ).getTimeOfDay(),
+                            triggerTimeinMillis,
                             pendingIntent);
                 }
                 viewModel.updateAlarms( alarms.get( i ) );

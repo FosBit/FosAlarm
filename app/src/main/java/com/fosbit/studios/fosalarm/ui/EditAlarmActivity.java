@@ -219,10 +219,16 @@ public class EditAlarmActivity extends AppCompatActivity {
                     today.set(Calendar.SECOND, 0);
                     today.set(Calendar.MINUTE, 0);
                     today.set(Calendar.HOUR_OF_DAY, 0);
+                    long triggerTimeinMillis = today.getTimeInMillis()
+                            + TimeUnit.HOURS.toMillis( hour )
+                            + TimeUnit.MINUTES.toMillis( minute );
+                    // If trigger time is in the past, set to the next day
+                    if ( triggerTimeinMillis <  Calendar.getInstance().getTimeInMillis() ) {
+                        triggerTimeinMillis +=  TimeUnit.DAYS.toMillis(1);
+                    }
                     // Set new alarm with pendingIntent
                     alarmManager.set( AlarmManager.RTC_WAKEUP,
-                            today.getTimeInMillis() + TimeUnit.HOURS.toMillis( hour )
-                                    + TimeUnit.MINUTES.toMillis( minute ),
+                            triggerTimeinMillis,
                             pendingIntent );
                     mFosViewModel.insertAlarms( alarm );
                 } else {
@@ -234,9 +240,16 @@ public class EditAlarmActivity extends AppCompatActivity {
                     today.set(Calendar.SECOND, 0);
                     today.set(Calendar.MINUTE, 0);
                     today.set(Calendar.HOUR_OF_DAY, 0);
+                    long triggerTimeinMillis = today.getTimeInMillis()
+                            + TimeUnit.HOURS.toMillis( hour )
+                            + TimeUnit.MINUTES.toMillis( minute );
+                    // If trigger time is in the past, set to the next day
+                    if ( triggerTimeinMillis <  Calendar.getInstance().getTimeInMillis() ) {
+                        triggerTimeinMillis +=  TimeUnit.DAYS.toMillis(1);
+                    }
+                    // Set new alarm with pendingIntent
                     alarmManager.set( AlarmManager.RTC_WAKEUP,
-                            today.getTimeInMillis() + TimeUnit.HOURS.toMillis( hour )
-                                    + TimeUnit.MINUTES.toMillis( minute ),
+                            triggerTimeinMillis,
                             pendingIntent );
                     mFosViewModel.updateAlarms( alarm );
                 }
