@@ -52,6 +52,8 @@ public class AlarmActivity extends AppCompatActivity {
                 false, bundle.getString("MEMORYID"));
         if ( !memoryValidation.isEmpty() ) {
             dismissAlarm.setClickable( false );
+        } else {
+            memoryMessage.setVisibility( View.GONE );
         }
 
 
