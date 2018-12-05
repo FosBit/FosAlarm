@@ -20,6 +20,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         Bundle bundle = new Bundle();
         bundle.putAll( intent.getExtras() );
         in.putExtras( bundle );
+        in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity( in );
         setResultCode( Activity.RESULT_OK );
     }
