@@ -1,9 +1,12 @@
 package com.fosbit.studios.fosalarm.ui;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -17,8 +20,6 @@ import android.widget.TextView;
 import com.fosbit.studios.fosalarm.R;
 import com.fosbit.studios.fosalarm.db.Alarm;
 import com.fosbit.studios.fosalarm.db.FosViewModel;
-
-import org.w3c.dom.Text;
 
 public class AlarmActivity extends AppCompatActivity {
     TextView memoryTitle;
@@ -79,8 +80,19 @@ public class AlarmActivity extends AppCompatActivity {
         Uri alarmUri = RingtoneManager.getDefaultUri( RingtoneManager.TYPE_ALARM );
         if ( alarmUri == null ) {
             alarmUri = RingtoneManager.getDefaultUri( RingtoneManager.TYPE_NOTIFICATION );
+            if ( alarmUri == null) {
+                // alert backup is null, using 2nd backup
+                alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+            }
         }
+
         ringtone = RingtoneManager.getRingtone( getBaseContext(), alarmUri );
+        if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ) {
+            ringtone.setAudioAttributes(
+                    new AudioAttributes.Builder().setUsage( AudioAttributes.USAGE_ALARM ).build() );
+        } else {
+            ringtone.setStreamType(AudioManager.STREAM_ALARM);
+        }
         ringtone.play();
     }
 
