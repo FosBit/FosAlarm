@@ -1,6 +1,7 @@
 package com.fosbit.studios.fosalarm;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +13,7 @@ import com.fosbit.studios.fosalarm.ui.AlarmActivity;
  * Created by Tatson on 05-Apr-17.
  */
 
-public class AlarmReceiver extends WakefulBroadcastReceiver {
+public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, Intent intent) {
@@ -21,7 +22,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         bundle.putAll( intent.getExtras() );
         in.putExtras( bundle );
         in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity( in );
+        AlarmJobIntentService.enqueueWork( context, in );
         setResultCode( Activity.RESULT_OK );
     }
 }

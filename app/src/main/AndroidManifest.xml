@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.fosbit.studios.fosalarm">
-
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -26,6 +26,9 @@
             android:label="@string/title_activity_alarm"
             android:theme="@style/AppTheme"></activity>
         <receiver android:name="com.fosbit.studios.fosalarm.AlarmReceiver"/>
+        <service
+            android:name=".AlarmJobIntentService"
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
     </application>
 
 </manifest>

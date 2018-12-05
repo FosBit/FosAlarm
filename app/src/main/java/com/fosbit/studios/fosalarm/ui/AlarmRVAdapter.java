@@ -182,7 +182,7 @@ public class AlarmRVAdapter extends RecyclerView.Adapter< AlarmRVAdapter.AlarmsV
                         ( AlarmManager ) viewModel.getApplication().getSystemService( viewModel.getApplication().ALARM_SERVICE );
                 if ( !isChecked ) {
                     // Cancel pendingIntent that matches previously set pending intent
-                    alarmManager.cancel(pendingIntent);
+                    alarmManager.cancel( pendingIntent );
                 } else {
                     Calendar today = Calendar.getInstance();
                     today.set(Calendar.MILLISECOND, 0);
@@ -196,18 +196,18 @@ public class AlarmRVAdapter extends RecyclerView.Adapter< AlarmRVAdapter.AlarmsV
                         triggerTimeinMillis +=  TimeUnit.DAYS.toMillis(1);
                     }
                     // Set alarm with pendingIntent
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ) {
                         AlarmManager.AlarmClockInfo alarmClockInfo =
-                                new AlarmManager.AlarmClockInfo( triggerTimeinMillis, pendingIntent);
+                                new AlarmManager.AlarmClockInfo( triggerTimeinMillis, pendingIntent );
                         alarmManager.setAlarmClock(alarmClockInfo, pendingIntent);
-                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                        alarmManager.setExact(android.app.AlarmManager.RTC_WAKEUP,
+                    } else if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT ) {
+                        alarmManager.setExact( android.app.AlarmManager.RTC_WAKEUP,
                                               triggerTimeinMillis,
-                                              pendingIntent);
+                                              pendingIntent );
                     } else {
-                        alarmManager.set(AlarmManager.RTC_WAKEUP,
+                        alarmManager.set( AlarmManager.RTC_WAKEUP,
                                 triggerTimeinMillis,
-                                pendingIntent);
+                                pendingIntent );
                     }
                 }
                 viewModel.updateAlarms( alarms.get( i ) );
