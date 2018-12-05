@@ -17,12 +17,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, Intent intent) {
-        Intent in = new Intent( context, AlarmActivity.class );
-        Bundle bundle = new Bundle();
-        bundle.putAll( intent.getExtras() );
-        in.putExtras( bundle );
-        in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        AlarmJobIntentService.enqueueWork( context, in );
+        AlarmJobIntentService.enqueueWork( context, intent );
         setResultCode( Activity.RESULT_OK );
     }
 }
