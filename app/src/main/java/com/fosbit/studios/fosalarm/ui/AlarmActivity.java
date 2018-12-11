@@ -35,7 +35,6 @@ public class AlarmActivity extends AppCompatActivity {
     Ringtone ringtone;
     String fullMemoryMessage;
     String[] memoryMessage;
-    Alarm alarm;
     HashMap<Integer, Pair<String, Boolean>> wordsFillMap;
 
     private FosViewModel mFosViewModel;
@@ -61,8 +60,10 @@ public class AlarmActivity extends AppCompatActivity {
         memoryTitle.setText( bundle.getString("TITLE" ) );
         fullMemoryMessage = bundle.getString("MESSAGE" );
         memoryMessage = fullMemoryMessage.split(" " );
-        alarm = new Alarm( bundle.getString("ALARMID" ), bundle.getLong("TIME" ),
-                false, bundle.getString("MEMORYID" ) );
+        mFosViewModel.updateAlarms( new Alarm(
+                bundle.getString("ALARMID" ),
+                bundle.getLong("TIME" ),
+                false, bundle.getString("MEMORYID" ) ) );
         if ( memoryMessage.length > 0 ) {
             List<LinearLayout> messageLines = new ArrayList<>();
             // Split string by spaces
@@ -213,7 +214,6 @@ public class AlarmActivity extends AppCompatActivity {
 
     public void stopRingtone( View v ) {
         ringtone.stop();
-        mFosViewModel.updateAlarms( alarm );
         finish();
     }
 
