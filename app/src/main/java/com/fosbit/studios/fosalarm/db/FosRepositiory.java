@@ -12,7 +12,7 @@ public class FosRepositiory {
     private LiveData<List<Memory>> mMemories;
 
     // Constructor
-    FosRepositiory(Application application ) {
+    FosRepositiory( Application application ) {
         FosRoomDatabase db = FosRoomDatabase.getDatabase( application );
         mFosDao = db.phosDAO();
         mAlarms = mFosDao.getAlarms();
@@ -28,27 +28,27 @@ public class FosRepositiory {
     }
 
     public void insertAlarms( final Alarm... alarms ) {
-        new insertAlarmsAsync(mFosDao).execute( alarms );
+        new insertAlarmsAsync( mFosDao ).execute( alarms );
     }
 
     public void insertMemories( final Memory... memories ) {
-        new insertMemoriesAsync(mFosDao).execute( memories );
+        new insertMemoriesAsync( mFosDao ).execute( memories );
     }
 
     public void updateAlarms( final Alarm... alarms ) {
-        new updateAlarmsAsync(mFosDao).execute( alarms );
+        new updateAlarmsAsync( mFosDao ).execute( alarms );
     }
 
     public void updateMemories( final Memory... memories ) {
-        new updateMemoriesAsync(mFosDao).execute( memories );
+        new updateMemoriesAsync( mFosDao ).execute( memories );
     }
 
     public void deleteAlarms( final Alarm... alarms ) {
-        new deleteAlarmsAsync(mFosDao).execute( alarms );
+        new deleteAlarmsAsync( mFosDao ).execute( alarms );
     }
 
-    public void deleteMemories( final Memory... memories) {
-        new deleteMemoriesAsync(mFosDao).execute( memories );
+    public void deleteMemories( final Memory... memories ) {
+        new deleteMemoriesAsync( mFosDao ).execute( memories );
     }
 
     public static class insertAlarmsAsync extends AsyncTask<Alarm, Void, Void> {

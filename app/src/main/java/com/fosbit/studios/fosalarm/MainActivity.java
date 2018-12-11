@@ -35,8 +35,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements MyAlarmFragment.OnFragmentInteractionListener,
-                   MemoryBankFragment.OnFragmentInteractionListener
-{
+        MemoryBankFragment.OnFragmentInteractionListener {
     private DrawerLayout m_drawer;
     private NavigationView m_nvDrawer;
     private static String LOG_TAG = "FosAlarm";
@@ -45,8 +44,7 @@ public class MainActivity extends AppCompatActivity
     private MemoryBankFragment memoryBankFragment;
 
     @Override
-    protected void onCreate( Bundle savedInstanceState )
-    {
+    protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_main );
 
@@ -66,29 +64,27 @@ public class MainActivity extends AppCompatActivity
         // Add an observer on the LiveData returned by getAlarms and getMemories.
         // The onChanged() method fires when the observed data changes and the activity is
         // in the foreground.
-        mFosViewModel.getAlarms().observe(this, new Observer<List<Alarm>>() {
+        mFosViewModel.getAlarms().observe( this, new Observer<List<Alarm>>() {
             @Override
-            public void onChanged(@Nullable final List<Alarm> alarms) {
+            public void onChanged( @Nullable final List<Alarm> alarms ) {
                 alarmFragment.updateData( alarms );
             }
-        });
+        } );
 
-        mFosViewModel.getMemories().observe(this, new Observer<List<Memory>>() {
+        mFosViewModel.getMemories().observe( this, new Observer<List<Memory>>() {
             @Override
-            public void onChanged(@Nullable final List<Memory> memories) {
+            public void onChanged( @Nullable final List<Memory> memories ) {
                 memoryBankFragment.updateData( memories );
             }
-        });
+        } );
 
-        Toolbar toolbar = ( Toolbar ) findViewById( R.id.toolbar );
+        Toolbar toolbar = findViewById( R.id.toolbar );
         setSupportActionBar( toolbar );
 
-        FloatingActionButton fab = ( FloatingActionButton ) findViewById( R.id.fab );
-        fab.setOnClickListener( new View.OnClickListener()
-        {
+        FloatingActionButton fab = findViewById( R.id.fab );
+        fab.setOnClickListener( new View.OnClickListener() {
             @Override
-            public void onClick( View v )
-            {
+            public void onClick( View v ) {
                 if ( getTitle().toString().equals( "Memory Bank" ) ) {
                     // Start edit memory activity
                     Intent intent = new Intent( v.getContext(), EditMemoryActivity.class );
@@ -98,7 +94,7 @@ public class MainActivity extends AppCompatActivity
                     v.getContext().startActivity( intent );
                 } else {
                     TimePickerDialog timePicker =
-                            new TimePickerDialog(MainActivity.this,
+                            new TimePickerDialog( MainActivity.this,
                                     new TimePickerDialog.OnTimeSetListener() {
                                         @Override
                                         public void onTimeSet( TimePicker view,
@@ -108,15 +104,15 @@ public class MainActivity extends AppCompatActivity
                                             Intent intent = new Intent( view.getContext(), EditAlarmActivity.class );
                                             Bundle bundle = new Bundle();
                                             bundle.putBoolean( "ISNEW", true );
-                                            bundle.putLong( "HOUROFDAY", Long.valueOf(hourOfDay) );
-                                            bundle.putLong( "MINUTE", Long.valueOf(minute) );
+                                            bundle.putLong( "HOUROFDAY", hourOfDay );
+                                            bundle.putLong( "MINUTE", minute );
                                             intent.putExtras( bundle );
                                             view.getContext().startActivity( intent );
                                         }
                                     },
                                     Calendar.getInstance().get( Calendar.HOUR_OF_DAY ),
                                     Calendar.getInstance().get( Calendar.MINUTE ),
-                                    false); // 'false' for 12-hour times
+                                    false ); // 'false' for 12-hour times
                     timePicker.show();
                 }
             }
@@ -124,8 +120,7 @@ public class MainActivity extends AppCompatActivity
 
         // Check that the activity is using the layout version with
         // the 'flContent' FrameLayout; defined in content_main.xml
-        if ( findViewById( R.id.flContent ) != null )
-        {
+        if ( findViewById( R.id.flContent ) != null ) {
 
             // However, if we're being restored from a previous state,
             // then we don't need to do anything and should return or else
@@ -137,18 +132,18 @@ public class MainActivity extends AppCompatActivity
         }
 
         // Find our drawer layout
-        m_drawer = ( DrawerLayout ) findViewById( R.id.drawer_layout );
+        m_drawer = findViewById( R.id.drawer_layout );
         // Find our drawer view
-        m_nvDrawer = ( NavigationView ) findViewById( R.id.nav_view );
+        m_nvDrawer = findViewById( R.id.nav_view );
         // Setup drawer view
         setupDrawerContent( m_nvDrawer );
         // Default item is nav_alarm
-        selectDrawerItem( m_nvDrawer.getMenu().getItem(0) );
+        selectDrawerItem( m_nvDrawer.getMenu().getItem( 0 ) );
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle( this,
-                                                                  m_drawer,
-                                                                  toolbar,
-                                                                  R.string.navigation_drawer_open,
-                                                                  R.string.navigation_drawer_close );
+                m_drawer,
+                toolbar,
+                R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close );
         // Tie DrawerLayout events to the ActionBarDrawerToggle
         // This lets hamburger icon animate
         m_drawer.addDrawerListener( toggle );
@@ -156,11 +151,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onOptionsItemSelected( MenuItem item )
-    {
+    public boolean onOptionsItemSelected( MenuItem item ) {
         // The action bar home/up action should open or close the drawer.
-        switch ( item.getItemId() )
-        {
+        switch ( item.getItemId() ) {
             case android.R.id.home:
                 m_drawer.openDrawer( GravityCompat.START );
                 return true;
@@ -169,14 +162,11 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected( item );
     }
 
-    private void setupDrawerContent( NavigationView navigationView )
-    {
+    private void setupDrawerContent( NavigationView navigationView ) {
         navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener()
-                {
+                new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
-                    public boolean onNavigationItemSelected( @NonNull MenuItem menuItem )
-                    {
+                    public boolean onNavigationItemSelected( @NonNull MenuItem menuItem ) {
                         selectDrawerItem( menuItem );
                         return true;
                     }
@@ -184,33 +174,27 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onBackPressed()
-    {
-        DrawerLayout drawer = ( DrawerLayout ) findViewById( R.id.drawer_layout );
-        if ( drawer.isDrawerOpen( GravityCompat.START ) )
-        {
+    public void onBackPressed() {
+        DrawerLayout drawer = findViewById( R.id.drawer_layout );
+        if ( drawer.isDrawerOpen( GravityCompat.START ) ) {
             drawer.closeDrawer( GravityCompat.START );
-        }else
-        {
+        } else {
             super.onBackPressed();
         }
     }
 
     @Override
-    public boolean onCreateOptionsMenu( Menu menu )
-    {
+    public boolean onCreateOptionsMenu( Menu menu ) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate( R.menu.main, menu );
         return true;
     }
 
-    public boolean selectDrawerItem( MenuItem item )
-    {
+    public boolean selectDrawerItem( MenuItem item ) {
         // Handle navigation view item clicks here.
-        Fragment fragment = null;
+        Fragment fragment;
         String fragmentTag;
-        switch ( item.getItemId() )
-        {
+        switch ( item.getItemId() ) {
             case R.id.nav_alarm:
                 fragment = alarmFragment;
                 fragmentTag = "alarm_fragment";
@@ -236,7 +220,7 @@ public class MainActivity extends AppCompatActivity
         setTitle( item.getTitle() );
 
 
-        DrawerLayout drawer = ( DrawerLayout ) findViewById( R.id.drawer_layout );
+        DrawerLayout drawer = findViewById( R.id.drawer_layout );
         drawer.closeDrawer( GravityCompat.START );
         return true;
 
@@ -244,8 +228,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onFragmentInteraction( Uri uri )
-    {
+    public void onFragmentInteraction( Uri uri ) {
         // Leaving blank for now. URI stands for "Uniform Resource Identifier",
         // a compact sequence of characters that identifies an abstract or physical resource.
         // It is useful if we have an Android content provider, but since we don't, I think

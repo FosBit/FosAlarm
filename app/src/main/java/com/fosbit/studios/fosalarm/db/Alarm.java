@@ -12,11 +12,10 @@ import android.support.annotation.NonNull;
  */
 
 @Entity
-public class Alarm
-{
+public class Alarm {
     @PrimaryKey
     @NonNull
-    @ColumnInfo( name = "alarm_id")
+    @ColumnInfo( name = "alarm_id" )
     private String alarmID;
     @ColumnInfo( name = "time" )
     private long timeOfDay;
@@ -45,8 +44,7 @@ public class Alarm
         this.status = status;
     }
 
-    public void setMemoryID( String memoryID )
-    {
+    public void setMemoryID( String memoryID ) {
         this.memoryID = memoryID;
     }
 
@@ -54,18 +52,15 @@ public class Alarm
         return this.alarmID;
     }
 
-    public long getTimeOfDay()
-    {
+    public long getTimeOfDay() {
         return this.timeOfDay;
     }
 
-    public boolean getStatus()
-    {
+    public boolean getStatus() {
         return this.status;
     }
 
-    public String getMemoryID()
-    {
+    public String getMemoryID() {
         return this.memoryID;
     }
 }

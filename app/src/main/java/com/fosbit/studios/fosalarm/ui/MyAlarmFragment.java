@@ -27,8 +27,7 @@ import java.util.List;
  * Use the {@link MyAlarmFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MyAlarmFragment extends Fragment
-{
+public class MyAlarmFragment extends Fragment {
     private List<Alarm> alarms;
     private RecyclerView rv;
     private View alarmsView;
@@ -37,35 +36,31 @@ public class MyAlarmFragment extends Fragment
 
     private OnFragmentInteractionListener mListener;
 
-    public MyAlarmFragment()
-    {
+    public MyAlarmFragment() {
         isInitialized = false;
         alarms = new ArrayList<>();
     }
 
-    public static MyAlarmFragment newInstance()
-    {
+    public static MyAlarmFragment newInstance() {
         MyAlarmFragment fragment = new MyAlarmFragment();
         return fragment;
     }
 
     @Override
-    public void onCreate( Bundle savedInstanceState )
-    {
+    public void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
 
-        if (mFosViewModel == null) {
-            mFosViewModel = ViewModelProviders.of(getActivity()).get(FosViewModel.class);
+        if ( mFosViewModel == null ) {
+            mFosViewModel = ViewModelProviders.of( getActivity() ).get( FosViewModel.class );
         }
     }
 
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container,
-                              Bundle savedInstanceState )
-    {
+                              Bundle savedInstanceState ) {
         if ( !isInitialized ) {
             // Inflate the layout for this fragment
-            alarmsView =  inflater.inflate( R.layout.fragment_my_alarm, container, false );
+            alarmsView = inflater.inflate( R.layout.fragment_my_alarm, container, false );
 
             rv = alarmsView.findViewById( R.id.alarm_rv );
 
@@ -75,38 +70,32 @@ public class MyAlarmFragment extends Fragment
             initializeAdapter();
             isInitialized = true;
         } else {
-            AlarmRVAdapter adapter = ( AlarmRVAdapter  ) rv.getAdapter();
+            AlarmRVAdapter adapter = (AlarmRVAdapter) rv.getAdapter();
             adapter.updateAlarms( this.alarms );
         }
         return alarmsView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed( Uri uri )
-    {
-        if ( mListener != null )
-        {
+    public void onButtonPressed( Uri uri ) {
+        if ( mListener != null ) {
             mListener.onFragmentInteraction( uri );
         }
     }
 
     @Override
-    public void onAttach( Context context )
-    {
+    public void onAttach( Context context ) {
         super.onAttach( context );
-        if ( context instanceof OnFragmentInteractionListener )
-        {
-            mListener = ( OnFragmentInteractionListener ) context;
-        }else
-        {
+        if ( context instanceof OnFragmentInteractionListener ) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
             throw new RuntimeException( context.toString()
                     + " must implement OnFragmentInteractionListener" );
         }
     }
 
     @Override
-    public void onDetach()
-    {
+    public void onDetach() {
         super.onDetach();
         mListener = null;
     }
@@ -121,26 +110,23 @@ public class MyAlarmFragment extends Fragment
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener
-    {
+    public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction( Uri uri );
     }
 
 
-    public void updateData( final List<Alarm> alarms )
-    {
+    public void updateData( final List<Alarm> alarms ) {
         this.alarms = alarms;
         // Make sure view is created before updating view
         if ( rv != null ) {
             AlarmRVAdapter adapter = (AlarmRVAdapter) rv.getAdapter();
-            adapter.updateAlarms(this.alarms);
+            adapter.updateAlarms( this.alarms );
         }
     }
 
-    private void initializeAdapter()
-    {
-        AlarmRVAdapter adapter = new AlarmRVAdapter( this.alarms, mFosViewModel);
+    private void initializeAdapter() {
+        AlarmRVAdapter adapter = new AlarmRVAdapter( this.alarms, mFosViewModel );
         rv.setAdapter( adapter );
     }
 }

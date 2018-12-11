@@ -16,7 +16,7 @@ import com.fosbit.studios.fosalarm.ui.AlarmActivity;
 public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
-    public void onReceive(final Context context, Intent intent) {
+    public void onReceive( final Context context, Intent intent ) {
         AlarmJobIntentService.enqueueWork( context, intent );
         setResultCode( Activity.RESULT_OK );
     }

@@ -56,18 +56,18 @@ public class EditAlarmActivity extends AppCompatActivity {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_edit_alarm );
 
-        alarmTimeCV = (CardView) findViewById( R.id.alarm_time_cardview );
-        selectedMemoryCV = ( CardView ) findViewById( R.id.memory_select_cardview );
-        selectedMemory = ( TextView ) findViewById( R.id.selected_memory );
-        alarmCancel = ( Button ) findViewById( R.id.cancel_alarm_button );
-        alarmSet = ( Button ) findViewById( R.id.set_alarm_button );
+        alarmTimeCV = findViewById( R.id.alarm_time_cardview );
+        selectedMemoryCV = findViewById( R.id.memory_select_cardview );
+        selectedMemory = findViewById( R.id.selected_memory );
+        alarmCancel = findViewById( R.id.cancel_alarm_button );
+        alarmSet = findViewById( R.id.set_alarm_button );
 
         Bundle bundle = getIntent().getExtras();
         // Get the hour and minute from extras when started from intent
         isNew = bundle.getBoolean( "ISNEW" );
         if ( isNew ) {
             alarmID = UUID.randomUUID().toString();
-            selectedMemory.setText( "Select Memory");
+            selectedMemory.setText( "Select Memory" );
             status = true;
         } else {
             alarmID = bundle.getString( "ALARMID" );
@@ -76,7 +76,7 @@ public class EditAlarmActivity extends AppCompatActivity {
         }
         hour = bundle.getLong( "HOUROFDAY" );
         minute = bundle.getLong( "MINUTE" );
-        alarmTime = ( TextView ) findViewById( R.id.alarm_edit_time );
+        alarmTime = findViewById( R.id.alarm_edit_time );
         if ( ( 12 - hour ) > 0 ) {
             if ( hour == 0 ) {
                 alarmTime.setText( new DecimalFormat( "00" ).format( hour + 12 )
@@ -91,9 +91,9 @@ public class EditAlarmActivity extends AppCompatActivity {
         }
 
         mFosViewModel = ViewModelProviders.of( this ).get( FosViewModel.class );
-        mFosViewModel.getMemories().observe(this, new Observer<List<Memory>>() {
+        mFosViewModel.getMemories().observe( this, new Observer<List<Memory>>() {
             @Override
-            public void onChanged(@Nullable final List<Memory> memories) {
+            public void onChanged( @Nullable final List<Memory> memories ) {
                 if ( memoriesList == null ) {
                     memoriesList = new ArrayList<>();
                 } else {
@@ -102,18 +102,19 @@ public class EditAlarmActivity extends AppCompatActivity {
                 memoriesList = memories;
                 if ( !isNew ) {
                     for ( int i = 0; i < memoriesList.size(); i++ ) {
-                        if ( memoriesList.get(i).getMemoryID().equals( memoryID ) )
-                            selectedMemory.setText( memoriesList.get(i).getTitle() );
+                        if ( memoriesList.get( i ).getMemoryID().equals( memoryID ) )
+                            selectedMemory.setText( memoriesList.get( i ).getTitle() );
+                        memoryMessage = memoriesList.get( i ).getMessage();
                     }
                 }
             }
-        });
+        } );
 
         alarmTimeCV.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick( View v ) {
                 TimePickerDialog timePicker =
-                        new TimePickerDialog(EditAlarmActivity.this,
+                        new TimePickerDialog( EditAlarmActivity.this,
                                 new TimePickerDialog.OnTimeSetListener() {
                                     @Override
                                     public void onTimeSet( TimePicker view,
@@ -125,26 +126,26 @@ public class EditAlarmActivity extends AppCompatActivity {
                                             if ( hour == 0 ) {
                                                 EditAlarmActivity.this.alarmTime.setText(
                                                         new DecimalFormat( "00" ).format( hour + 12 )
-                                                        + ":" + new DecimalFormat( "00" ).format( minute ) + " AM" );
+                                                                + ":" + new DecimalFormat( "00" ).format( minute ) + " AM" );
                                             } else {
                                                 EditAlarmActivity.this.alarmTime.setText(
-                                                        new DecimalFormat( "00").format( hour )
-                                                        + ":" + new DecimalFormat( "00" ).format( minute ) + " AM");
+                                                        new DecimalFormat( "00" ).format( hour )
+                                                                + ":" + new DecimalFormat( "00" ).format( minute ) + " AM" );
                                             }
                                         } else {
                                             EditAlarmActivity.this.alarmTime.setText(
                                                     new DecimalFormat( "00" ).format( hour - 12 )
-                                                    + ":" + new DecimalFormat( "00" ).format( minute )
-                                                    + " PM"  );
+                                                            + ":" + new DecimalFormat( "00" ).format( minute )
+                                                            + " PM" );
                                         }
                                     }
                                 },
                                 Calendar.getInstance().get( Calendar.HOUR_OF_DAY ),
                                 Calendar.getInstance().get( Calendar.MINUTE ),
-                                false); // 'false' for 12-hour times
+                                false ); // 'false' for 12-hour times
                 timePicker.show();
             }
-        });
+        } );
 
         selectedMemoryCV.setOnClickListener( new View.OnClickListener() {
             @Override
@@ -154,29 +155,29 @@ public class EditAlarmActivity extends AppCompatActivity {
                 for ( int i = 0; i < memoriesList.size(); i++ ) {
                     memoriesTitles.add( memoriesList.get( i ).getTitle() );
                 }
-                final CharSequence[] memories= memoriesTitles.toArray(new CharSequence[ memoriesTitles.size() ] );
+                final CharSequence[] memories = memoriesTitles.toArray( new CharSequence[memoriesTitles.size()] );
                 final AlertDialog levelDialog;
                 AlertDialog.Builder builder = new AlertDialog.Builder( v.getContext() );
-                builder.setTitle("Select a memory:");
+                builder.setTitle( "Select a memory:" );
                 builder.setSingleChoiceItems( memories, 0, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int item) {
+                    public void onClick( DialogInterface dialog, int item ) {
                         selectedMemory.setText( memoriesList.get( item ).getTitle() );
                         memoryID = memoriesList.get( item ).getMemoryID();
                         memoryMessage = memoriesList.get( item ).getMessage();
                         dialog.dismiss();
                     }
-                });
+                } );
                 levelDialog = builder.create();
                 levelDialog.show();
             }
-        });
+        } );
 
         alarmCancel.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick( View v ) {
                 finish();
             }
-        });
+        } );
 
         alarmSet.setOnClickListener( new View.OnClickListener() {
             @Override
@@ -190,7 +191,7 @@ public class EditAlarmActivity extends AppCompatActivity {
                 Alarm alarm = new Alarm( alarmID,
                         TimeUnit.HOURS.toMillis( hour )
                                 + TimeUnit.MINUTES.toMillis( minute ),
-                        status, memoryID);
+                        true, memoryID );
 
                 Intent myIntent = new Intent( getApplicationContext(), AlarmReceiver.class );
 
@@ -198,11 +199,11 @@ public class EditAlarmActivity extends AppCompatActivity {
                 // Just to make sure app handles edge case where no memory is selected
                 if ( memoryMessage != null ) {
                     myIntent.putExtra( "TITLE", selectedMemory.getText().toString() );
-                    myIntent.putExtra("MESSAGE", memoryMessage);
+                    myIntent.putExtra( "MESSAGE", memoryMessage );
 
                 } else {
                     myIntent.putExtra( "TITLE", "" );
-                    myIntent.putExtra("MESSAGE", "");
+                    myIntent.putExtra( "MESSAGE", "" );
                 }
 
                 myIntent.putExtra( "ALARMID", alarmID );
@@ -213,29 +214,25 @@ public class EditAlarmActivity extends AppCompatActivity {
                         requestCode,
                         myIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT );
-                AlarmManager alarmManager = ( AlarmManager ) getSystemService( ALARM_SERVICE );
+                AlarmManager alarmManager = (AlarmManager) getSystemService( ALARM_SERVICE );
                 if ( isNew ) {
                     Calendar today = Calendar.getInstance();
-                    today.set(Calendar.MILLISECOND, 0);
-                    today.set(Calendar.SECOND, 0);
-                    today.set(Calendar.MINUTE, 0);
-                    today.set(Calendar.HOUR_OF_DAY, 0);
+                    today.set( Calendar.MILLISECOND, 0 );
+                    today.set( Calendar.SECOND, 0 );
+                    today.set( Calendar.MINUTE, 0 );
+                    today.set( Calendar.HOUR_OF_DAY, 0 );
                     long triggerTimeinMillis = today.getTimeInMillis()
                             + TimeUnit.HOURS.toMillis( hour )
                             + TimeUnit.MINUTES.toMillis( minute );
                     // If trigger time is in the past, set to the next day
-                    if ( triggerTimeinMillis <  Calendar.getInstance().getTimeInMillis() ) {
-                        triggerTimeinMillis +=  TimeUnit.DAYS.toMillis(1);
+                    if ( triggerTimeinMillis < Calendar.getInstance().getTimeInMillis() ) {
+                        triggerTimeinMillis += TimeUnit.DAYS.toMillis( 1 );
                     }
                     // Set new alarm with pendingIntent
                     if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ) {
                         AlarmManager.AlarmClockInfo alarmClockInfo =
                                 new AlarmManager.AlarmClockInfo( triggerTimeinMillis, pendingIntent );
-                        alarmManager.setAlarmClock(alarmClockInfo, pendingIntent);
-                    } else if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT ) {
-                        alarmManager.setExact( android.app.AlarmManager.RTC_WAKEUP,
-                                triggerTimeinMillis,
-                                pendingIntent );
+                        alarmManager.setAlarmClock( alarmClockInfo, pendingIntent );
                     } else {
                         alarmManager.set( AlarmManager.RTC_WAKEUP,
                                 triggerTimeinMillis,
@@ -247,26 +244,22 @@ public class EditAlarmActivity extends AppCompatActivity {
                     alarmManager.cancel( pendingIntent );
                     // Re-set updated alarm with pendingIntent
                     Calendar today = Calendar.getInstance();
-                    today.set(Calendar.MILLISECOND, 0);
-                    today.set(Calendar.SECOND, 0);
-                    today.set(Calendar.MINUTE, 0);
-                    today.set(Calendar.HOUR_OF_DAY, 0);
+                    today.set( Calendar.MILLISECOND, 0 );
+                    today.set( Calendar.SECOND, 0 );
+                    today.set( Calendar.MINUTE, 0 );
+                    today.set( Calendar.HOUR_OF_DAY, 0 );
                     long triggerTimeinMillis = today.getTimeInMillis()
                             + TimeUnit.HOURS.toMillis( hour )
                             + TimeUnit.MINUTES.toMillis( minute );
                     // If trigger time is in the past, set to the next day
-                    if ( triggerTimeinMillis <  Calendar.getInstance().getTimeInMillis() ) {
-                        triggerTimeinMillis +=  TimeUnit.DAYS.toMillis(1);
+                    if ( triggerTimeinMillis < Calendar.getInstance().getTimeInMillis() ) {
+                        triggerTimeinMillis += TimeUnit.DAYS.toMillis( 1 );
                     }
                     // Set new alarm with pendingIntent
                     if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ) {
                         AlarmManager.AlarmClockInfo alarmClockInfo =
                                 new AlarmManager.AlarmClockInfo( triggerTimeinMillis, pendingIntent );
-                        alarmManager.setAlarmClock(alarmClockInfo, pendingIntent);
-                    } else if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT ) {
-                        alarmManager.setExact( android.app.AlarmManager.RTC_WAKEUP,
-                                triggerTimeinMillis,
-                                pendingIntent );
+                        alarmManager.setAlarmClock( alarmClockInfo, pendingIntent );
                     } else {
                         alarmManager.set( AlarmManager.RTC_WAKEUP,
                                 triggerTimeinMillis,
@@ -277,6 +270,6 @@ public class EditAlarmActivity extends AppCompatActivity {
 
                 finish();
             }
-        });
+        } );
     }
 }

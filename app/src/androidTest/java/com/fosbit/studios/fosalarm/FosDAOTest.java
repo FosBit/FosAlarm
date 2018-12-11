@@ -20,7 +20,7 @@ import java.util.UUID;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-@RunWith(AndroidJUnit4.class)
+@RunWith( AndroidJUnit4.class )
 public class FosDAOTest {
     private FosRoomDatabase mPhosDb;
 
@@ -31,7 +31,7 @@ public class FosDAOTest {
          * (e.g. a test input for one of your tests) then call getContext().
          */
         Context context = InstrumentationRegistry.getContext();
-        mPhosDb = Room.inMemoryDatabaseBuilder(context, FosRoomDatabase.class).build();
+        mPhosDb = Room.inMemoryDatabaseBuilder( context, FosRoomDatabase.class ).build();
     }
 
     @After

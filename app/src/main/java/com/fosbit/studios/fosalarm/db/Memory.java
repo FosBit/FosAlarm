@@ -12,15 +12,14 @@ import android.support.annotation.NonNull;
  */
 
 @Entity
-public class Memory
-{
+public class Memory {
     @PrimaryKey
     @NonNull
-    @ColumnInfo( name = "memory_id")
+    @ColumnInfo( name = "memory_id" )
     private String memoryID;
-    @ColumnInfo( name = "title")
+    @ColumnInfo( name = "title" )
     private String title;
-    @ColumnInfo( name = "message")
+    @ColumnInfo( name = "message" )
     private String message;
 
     public Memory( String memoryID, String title, String message ) {

@@ -32,30 +32,27 @@ import java.util.concurrent.TimeUnit;
  * Created by Aaron on 11/27/2017.
  */
 
-public class AlarmRVAdapter extends RecyclerView.Adapter< AlarmRVAdapter.AlarmsViewHolder >
-{
+public class AlarmRVAdapter extends RecyclerView.Adapter<AlarmRVAdapter.AlarmsViewHolder> {
 
-    public static class AlarmsViewHolder extends RecyclerView.ViewHolder
-    {
+    public static class AlarmsViewHolder extends RecyclerView.ViewHolder {
         // Provide a reference to the views for each data item
         // Complex data items may need more than one view per item, and
         // you provide access to all the views for a data item in a view holder
         CardView cv;
-        TextView alarmName;;
+        TextView alarmName;
         Button alarmEdit;
         Button alarmDelete;
         Switch alarmSwitch;
 
 
-        AlarmsViewHolder( View itemView )
-        {
+        AlarmsViewHolder( View itemView ) {
             super( itemView );
             // Find views to put in the references
-            cv = ( CardView ) itemView.findViewById( R.id.memory_cardview );
-            alarmName = ( TextView ) itemView.findViewById( R.id.alarm_time);
-            alarmEdit = ( Button ) itemView.findViewById( R.id.alarm_edit_button );
-            alarmDelete = ( Button ) itemView.findViewById( R.id.alarm_delete_button );
-            alarmSwitch = ( Switch ) itemView.findViewById( R.id.alarm_switch );
+            cv = itemView.findViewById( R.id.memory_cardview );
+            alarmName = itemView.findViewById( R.id.alarm_time );
+            alarmEdit = itemView.findViewById( R.id.alarm_edit_button );
+            alarmDelete = itemView.findViewById( R.id.alarm_delete_button );
+            alarmSwitch = itemView.findViewById( R.id.alarm_switch );
         }
     }
 
@@ -63,15 +60,14 @@ public class AlarmRVAdapter extends RecyclerView.Adapter< AlarmRVAdapter.AlarmsV
     FosViewModel viewModel;
 
     // Provide a suitable constructor
-    AlarmRVAdapter( List<Alarm> alarms, FosViewModel viewModel )
-    {
+    AlarmRVAdapter( List<Alarm> alarms, FosViewModel viewModel ) {
         this.alarms = new ArrayList<>();
         updateAlarms( alarms );
         this.viewModel = viewModel;
     }
 
     public void updateAlarms( List<Alarm> alarms ) {
-        if ( alarms != null && alarms.size() >= 0 ) {
+        if ( alarms != null ) {
             this.alarms.clear();
             this.alarms.addAll( alarms );
             notifyDataSetChanged();
@@ -79,18 +75,15 @@ public class AlarmRVAdapter extends RecyclerView.Adapter< AlarmRVAdapter.AlarmsV
     }
 
     @Override
-    public void onAttachedToRecyclerView( RecyclerView recyclerView )
-    {
+    public void onAttachedToRecyclerView( RecyclerView recyclerView ) {
         super.onAttachedToRecyclerView( recyclerView );
     }
 
     // Create new views (invoked by the layout manager)
     @Override
-    public AlarmsViewHolder onCreateViewHolder( ViewGroup viewGroup, int i )
-    {
+    public AlarmsViewHolder onCreateViewHolder( ViewGroup viewGroup, int i ) {
         View v = LayoutInflater.from( viewGroup.getContext() ).inflate( R.layout.alarm_item, viewGroup, false );
-        AlarmsViewHolder pvh = new AlarmsViewHolder( v );
-        return pvh;
+        return new AlarmsViewHolder( v );
     }
 
     // Replace the contents of a view (invoked by the layout manager)
@@ -102,23 +95,21 @@ public class AlarmRVAdapter extends RecyclerView.Adapter< AlarmRVAdapter.AlarmsV
         if ( ( 12 - hour ) > 0 ) {
             if ( hour == 0 ) {
                 holder.alarmName.setText( new DecimalFormat( "00" ).format( hour + 12 )
-                        + ":" + new DecimalFormat("00" ).format( minute ) + " AM" );
+                        + ":" + new DecimalFormat( "00" ).format( minute ) + " AM" );
             } else {
                 holder.alarmName.setText( new DecimalFormat( "00" ).format( hour )
-                        + ":" + new DecimalFormat(  "00" ).format( minute ) + " AM" );
+                        + ":" + new DecimalFormat( "00" ).format( minute ) + " AM" );
             }
         } else {
             holder.alarmName.setText( new DecimalFormat( "00" ).format( hour - 12 )
-                    + ":" + new DecimalFormat( "00" ).format( minute ) + " PM");
+                    + ":" + new DecimalFormat( "00" ).format( minute ) + " PM" );
         }
         holder.alarmSwitch.setChecked( alarms.get( i ).getStatus() );
 
         // Set a click listener for alarm edit
-        holder.alarmEdit.setOnClickListener( new View.OnClickListener()
-        {
+        holder.alarmEdit.setOnClickListener( new View.OnClickListener() {
             @Override
-            public void onClick( View v )
-            {
+            public void onClick( View v ) {
                 long hour = TimeUnit.MILLISECONDS.toHours( alarms.get( i ).getTimeOfDay() );
                 long minute = TimeUnit.MILLISECONDS.toMinutes( alarms.get( i ).getTimeOfDay() - TimeUnit.HOURS.toMillis( hour ) );
                 // Start edit activity
@@ -133,13 +124,12 @@ public class AlarmRVAdapter extends RecyclerView.Adapter< AlarmRVAdapter.AlarmsV
                 intent.putExtras( bundle );
                 v.getContext().startActivity( intent );
             }
-        });
+        } );
 
         // Same for alarm delete
         holder.alarmDelete.setOnClickListener( new View.OnClickListener() {
             @Override
-            public void onClick( View v )
-            {
+            public void onClick( View v ) {
                 // Remove alarm from database
                 viewModel.deleteAlarms( alarms.get( i ) );
 
@@ -154,15 +144,15 @@ public class AlarmRVAdapter extends RecyclerView.Adapter< AlarmRVAdapter.AlarmsV
                         myIntent,
                         0 );
                 AlarmManager alarmManager =
-                        ( AlarmManager ) viewModel.getApplication().getSystemService( viewModel.getApplication().ALARM_SERVICE );
+                        (AlarmManager) viewModel.getApplication().getSystemService( viewModel.getApplication().ALARM_SERVICE );
                 // Cancel pendingIntent that matches previously set pending intent
-                alarmManager.cancel(pendingIntent);
+                alarmManager.cancel( pendingIntent );
                 pendingIntent.cancel();
 
                 // Show removed notification
                 Snackbar.make( v, "Alarm Removed.", Snackbar.LENGTH_LONG ).show();
             }
-        });
+        } );
 
         // And alarm switch
         holder.alarmSwitch.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener() {
@@ -179,31 +169,27 @@ public class AlarmRVAdapter extends RecyclerView.Adapter< AlarmRVAdapter.AlarmsV
                         myIntent,
                         0 );
                 AlarmManager alarmManager =
-                        ( AlarmManager ) viewModel.getApplication().getSystemService( viewModel.getApplication().ALARM_SERVICE );
+                        (AlarmManager) viewModel.getApplication().getSystemService( viewModel.getApplication().ALARM_SERVICE );
                 if ( !isChecked ) {
                     // Cancel pendingIntent that matches previously set pending intent
                     alarmManager.cancel( pendingIntent );
                 } else {
                     Calendar today = Calendar.getInstance();
-                    today.set(Calendar.MILLISECOND, 0);
-                    today.set(Calendar.SECOND, 0);
-                    today.set(Calendar.MINUTE, 0);
-                    today.set(Calendar.HOUR_OF_DAY, 0);
+                    today.set( Calendar.MILLISECOND, 0 );
+                    today.set( Calendar.SECOND, 0 );
+                    today.set( Calendar.MINUTE, 0 );
+                    today.set( Calendar.HOUR_OF_DAY, 0 );
                     long triggerTimeinMillis = today.getTimeInMillis()
                             + alarms.get( i ).getTimeOfDay();
                     // If trigger time is in the past, set to the next day
-                    if ( triggerTimeinMillis <  Calendar.getInstance().getTimeInMillis() ) {
-                        triggerTimeinMillis +=  TimeUnit.DAYS.toMillis(1);
+                    if ( triggerTimeinMillis < Calendar.getInstance().getTimeInMillis() ) {
+                        triggerTimeinMillis += TimeUnit.DAYS.toMillis( 1 );
                     }
                     // Set alarm with pendingIntent
                     if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ) {
                         AlarmManager.AlarmClockInfo alarmClockInfo =
                                 new AlarmManager.AlarmClockInfo( triggerTimeinMillis, pendingIntent );
-                        alarmManager.setAlarmClock(alarmClockInfo, pendingIntent);
-                    } else if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT ) {
-                        alarmManager.setExact( android.app.AlarmManager.RTC_WAKEUP,
-                                              triggerTimeinMillis,
-                                              pendingIntent );
+                        alarmManager.setAlarmClock( alarmClockInfo, pendingIntent );
                     } else {
                         alarmManager.set( AlarmManager.RTC_WAKEUP,
                                 triggerTimeinMillis,
@@ -212,13 +198,12 @@ public class AlarmRVAdapter extends RecyclerView.Adapter< AlarmRVAdapter.AlarmsV
                 }
                 viewModel.updateAlarms( alarms.get( i ) );
             }
-        });
+        } );
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
-    public int getItemCount()
-    {
+    public int getItemCount() {
         return alarms.size();
     }
 }

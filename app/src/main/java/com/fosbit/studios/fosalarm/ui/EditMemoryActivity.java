@@ -23,14 +23,14 @@ public class EditMemoryActivity extends AppCompatActivity {
     String memoryID;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_memory);
+    protected void onCreate( Bundle savedInstanceState ) {
+        super.onCreate( savedInstanceState );
+        setContentView( R.layout.activity_edit_memory );
 
-        memoryTitle = ( EditText ) findViewById( R.id.memory_edit_title);
-        memoryDescription = ( EditText ) findViewById( R.id.memory_edit_description);
-        memoryCancel = ( Button ) findViewById( R.id.cancel_memory_button );
-        memorySave = ( Button ) findViewById( R.id.save_memory_button );
+        memoryTitle = findViewById( R.id.memory_edit_title );
+        memoryDescription = findViewById( R.id.memory_edit_description );
+        memoryCancel = findViewById( R.id.cancel_memory_button );
+        memorySave = findViewById( R.id.save_memory_button );
 
         mFosViewModel = ViewModelProviders.of( this ).get( FosViewModel.class );
 
@@ -39,8 +39,8 @@ public class EditMemoryActivity extends AppCompatActivity {
         if ( isNew ) {
             memoryID = UUID.randomUUID().toString();
         } else {
-            memoryTitle.setText( bundle.getString("TITLE" ) );
-            memoryDescription.setText( bundle.getString("DESCRIPTION" ) );
+            memoryTitle.setText( bundle.getString( "TITLE" ) );
+            memoryDescription.setText( bundle.getString( "DESCRIPTION" ) );
             memoryID = bundle.getString( "MEMORYID" );
         }
 
@@ -49,7 +49,7 @@ public class EditMemoryActivity extends AppCompatActivity {
             public void onClick( View v ) {
                 finish();
             }
-        });
+        } );
 
         memorySave.setOnClickListener( new View.OnClickListener() {
             @Override
@@ -65,7 +65,7 @@ public class EditMemoryActivity extends AppCompatActivity {
 
                 finish();
             }
-        });
+        } );
 
     }
 }

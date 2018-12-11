@@ -13,27 +13,27 @@ import java.util.List;
 public interface FosDAO {
     //TODO: Add queries that are needed
 
-    @Query("SELECT * FROM Memory")
-    public LiveData<List<Memory>> getMemories();
+    @Query( "SELECT * FROM Memory" )
+    LiveData<List<Memory>> getMemories();
 
-    @Query("SELECT * FROM Alarm")
-    public LiveData<List<Alarm>> getAlarms();
-
-    @Insert
-    public void insertAlarms( Alarm... alarms );
+    @Query( "SELECT * FROM Alarm" )
+    LiveData<List<Alarm>> getAlarms();
 
     @Insert
-    public void insertMemories( Memory... memories );
+    void insertAlarms( Alarm... alarms );
+
+    @Insert
+    void insertMemories( Memory... memories );
 
     @Update
-    public void updateAlarms( Alarm... alarms );
+    void updateAlarms( Alarm... alarms );
 
     @Update
-    public void updateMemories( Memory... memories );
+    void updateMemories( Memory... memories );
 
     @Delete
-    public void deleteAlarms(  Alarm... alarms  );
+    void deleteAlarms( Alarm... alarms );
 
     @Delete
-    public void deleteMemories( Memory... memories );
+    void deleteMemories( Memory... memories );
 }

@@ -22,11 +22,9 @@ import java.util.List;
  * Created by Aaron on 11/27/2017.
  */
 
-public class MemoryBankRVAdapter extends RecyclerView.Adapter< MemoryBankRVAdapter.MemoriesViewHolder >
-{
+public class MemoryBankRVAdapter extends RecyclerView.Adapter<MemoryBankRVAdapter.MemoriesViewHolder> {
 
-    public static class MemoriesViewHolder extends RecyclerView.ViewHolder
-    {
+    public static class MemoriesViewHolder extends RecyclerView.ViewHolder {
         // Provide a reference to the views for each data item
         // Complex data items may need more than one view per item, and
         // you provide access to all the views for a data item in a view holder
@@ -37,15 +35,14 @@ public class MemoryBankRVAdapter extends RecyclerView.Adapter< MemoryBankRVAdapt
         Button memoryDelete;
 
 
-        MemoriesViewHolder( View itemView )
-        {
+        MemoriesViewHolder( View itemView ) {
             super( itemView );
             // Find views to put in the references
-            cv = ( CardView ) itemView.findViewById( R.id.memory_cardview );
-            memoryName = ( TextView ) itemView.findViewById( R.id.memory_title);
-            memoryDesc = ( TextView ) itemView.findViewById( R.id.memory_description );
-            memoryEdit = ( Button ) itemView.findViewById( R.id.memory_edit_button );
-            memoryDelete = ( Button ) itemView.findViewById( R.id.memory_delete_button );
+            cv = itemView.findViewById( R.id.memory_cardview );
+            memoryName = itemView.findViewById( R.id.memory_title );
+            memoryDesc = itemView.findViewById( R.id.memory_description );
+            memoryEdit = itemView.findViewById( R.id.memory_edit_button );
+            memoryDelete = itemView.findViewById( R.id.memory_delete_button );
         }
     }
 
@@ -53,15 +50,14 @@ public class MemoryBankRVAdapter extends RecyclerView.Adapter< MemoryBankRVAdapt
     FosViewModel viewModel;
 
     // Provide a suitable constructor
-    MemoryBankRVAdapter( List<Memory> memories, FosViewModel viewModel )
-    {
+    MemoryBankRVAdapter( List<Memory> memories, FosViewModel viewModel ) {
         this.memories = new ArrayList<>();
         updateMemories( memories );
         this.viewModel = viewModel;
     }
 
     public void updateMemories( List<Memory> memories ) {
-        if ( memories != null && memories.size() >= 0 ) {
+        if ( memories != null ) {
             this.memories.clear();
             this.memories.addAll( memories );
             notifyDataSetChanged();
@@ -69,33 +65,28 @@ public class MemoryBankRVAdapter extends RecyclerView.Adapter< MemoryBankRVAdapt
     }
 
     @Override
-    public void onAttachedToRecyclerView( RecyclerView recyclerView )
-    {
+    public void onAttachedToRecyclerView( RecyclerView recyclerView ) {
         super.onAttachedToRecyclerView( recyclerView );
     }
 
     // Create new views (invoked by the layout manager)
     @Override
-    public MemoriesViewHolder onCreateViewHolder( ViewGroup viewGroup, int i )
-    {
+    public MemoriesViewHolder onCreateViewHolder( ViewGroup viewGroup, int i ) {
         View v = LayoutInflater.from( viewGroup.getContext() ).inflate( R.layout.memory_item, viewGroup, false );
-        MemoriesViewHolder pvh = new MemoriesViewHolder( v );
-        return pvh;
+        return new MemoriesViewHolder( v );
+
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder( MemoriesViewHolder holder, final int i )
-    {
+    public void onBindViewHolder( MemoriesViewHolder holder, final int i ) {
         holder.memoryName.setText( memories.get( i ).getTitle() );
         holder.memoryDesc.setText( memories.get( i ).getMessage() );
 
         // Set a click listener for memory edit
-        holder.memoryEdit.setOnClickListener( new View.OnClickListener()
-        {
+        holder.memoryEdit.setOnClickListener( new View.OnClickListener() {
             @Override
-            public void onClick( View v )
-            {
+            public void onClick( View v ) {
                 // Start edit activity
                 Intent intent = new Intent( v.getContext(), EditMemoryActivity.class );
                 Bundle bundle = new Bundle();
@@ -106,14 +97,12 @@ public class MemoryBankRVAdapter extends RecyclerView.Adapter< MemoryBankRVAdapt
                 intent.putExtras( bundle );
                 v.getContext().startActivity( intent );
             }
-        });
+        } );
 
         // Same for memory delete
-        holder.memoryDelete.setOnClickListener( new View.OnClickListener()
-        {
+        holder.memoryDelete.setOnClickListener( new View.OnClickListener() {
             @Override
-            public void onClick( View v )
-            {
+            public void onClick( View v ) {
                 //remove memory from database
                 viewModel.deleteMemories( memories.get( i ) );
                 // Show the removed item title
@@ -121,13 +110,12 @@ public class MemoryBankRVAdapter extends RecyclerView.Adapter< MemoryBankRVAdapt
                         "Removed: " + memories.get( i ).getTitle(),
                         Snackbar.LENGTH_LONG ).show();
             }
-        });
+        } );
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
-    public int getItemCount()
-    {
+    public int getItemCount() {
         return memories.size();
     }
 }

@@ -17,7 +17,7 @@ public abstract class FosRoomDatabase extends RoomDatabase {
     // database opened at the same time.
     private static FosRoomDatabase INSTANCE;
 
-    public static FosRoomDatabase getDatabase(final Context context ) {
+    public static FosRoomDatabase getDatabase( final Context context ) {
         if ( INSTANCE == null ) {
             // synchronized; only one thread can execute at a time, other threads are blocked
             synchronized ( FosRoomDatabase.class ) {
@@ -26,7 +26,7 @@ public abstract class FosRoomDatabase extends RoomDatabase {
                     // in the application context from the FosRoomDatabase class named
                     // "phos_database"
                     INSTANCE = Room.databaseBuilder( context.getApplicationContext(),
-                               FosRoomDatabase.class, "phos_database" ).build();
+                            FosRoomDatabase.class, "phos_database" ).build();
                 }
             }
         }
