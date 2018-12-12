@@ -101,8 +101,13 @@ public class AlarmRVAdapter extends RecyclerView.Adapter<AlarmRVAdapter.AlarmsVi
                         + ":" + new DecimalFormat( "00" ).format( minute ) + " AM" );
             }
         } else {
-            holder.alarmName.setText( new DecimalFormat( "00" ).format( hour - 12 )
-                    + ":" + new DecimalFormat( "00" ).format( minute ) + " PM" );
+            if ( hour == 12 ) {
+                holder.alarmName.setText( new DecimalFormat( "00" ).format( hour )
+                        + ":" + new DecimalFormat( "00" ).format( minute ) + " PM" );
+            } else {
+                holder.alarmName.setText( new DecimalFormat( "00" ).format( hour - 12 )
+                        + ":" + new DecimalFormat( "00" ).format( minute ) + " PM" );
+            }
         }
         holder.alarmSwitch.setChecked( alarms.get( i ).getStatus() );
 
