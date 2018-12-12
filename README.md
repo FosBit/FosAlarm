@@ -56,3 +56,6 @@ https://www.dropbox.com/sh/rg6fo2bmykuyjwm/AABC_1rAsA1snLGlfDKcNu1Sa?dl=0
 [4]: https://github.com/FosBit/FosAlarm/blob/master/screenshots/4.png
 [5]: https://github.com/FosBit/FosAlarm/blob/master/screenshots/5.png
 [6]: https://github.com/FosBit/FosAlarm/blob/master/screenshots/6.png
+
+###### Feedback
+###### If there is any feedback you would like to provide, please e-mail fosbitstudios@gmail.com. Thanks!
