@@ -4,7 +4,7 @@
 
 Are memorizing things hard for you? Do you have a hard time waking up in the morning? Maybe both? FosAlarm is here! 
 
-FosAlarm is an alarm to help users with the act of memorization. For most things we need to memorize, we need to set aside time in the day/week just commit it to memory. But with a busy schedule, how can we find time? Well, why not make it the first thing you do when you wake up? Just set an alarm with the word/phrase you want to memorize, and FosAlarm will ring when it's time to wake up and prompt you to fill in blanks for what you neet to remember!
+FosAlarm is an alarm to help users with the act of memorization. For most things we need to memorize, we need to set aside time in the day/week just commit it to memory. But with a busy schedule, how can we find time? Well, why not make it the first thing you do when you wake up? Just set an alarm with the word/phrase you want to memorize, and FosAlarm will ring when it's time to wake up and prompt you to fill in blanks for what you need to remember!
 
 #### APK Downloads
 https://www.dropbox.com/sh/rg6fo2bmykuyjwm/AABC_1rAsA1snLGlfDKcNu1Sa?dl=0
