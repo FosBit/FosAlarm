@@ -15,6 +15,37 @@ https://www.dropbox.com/sh/rg6fo2bmykuyjwm/AABC_1rAsA1snLGlfDKcNu1Sa?dl=0
 3. Since the app is not a Google Play recognized app yet, your phone my have a couple of security prompts to warn you about installing apps outside of the play store. Please read carefully. If you still want to install, continue past the prompts and install. (The app does not require any special access).
 4. Done!
 
+#### How to Use:
+1. Adding a memory:
+
+   * Swipe in from the left to get to the navigation bar
+   * Select "Memory Bank" if not already selected
+   * Tap the FAB on the bottom of the screen to start adding a memory to use
+   * When you're done, tap the "OK" button. The memory will be added to your list of memories.
+   
+2. Adding an alarm:
+   * Swipe in from the left to get to the navigation bar
+   * Select "Alarms" if not already selected
+   * Tap the FAB on the bottom of the screen to start adding an Alarm
+   * A time picker dialog will come up; Select the time for the alarm to go off
+   * Another screen will pop up with the time selected and a card to select the memory to tie to the alarm
+      * If no memory is selected, the alarm will act like a simple alarm with only an option to dimiss the alarm
+   * When you're done, tap the "Set" button. The alarm will be added to your list of alarms.
+   
+3. To dismiss an alarm with a memory:
+   * When an alarm goes off, you will have to type in your memory exactly before the alarm can be dismissed
+      * Depending on how long your memory is, either you will need to type in your whole memory or you will have to fill in the blanks for a random set of words in the memory
+   * Once everything is filled in correctly, the dismiss button will activate and you may dismiss the alarm
+      * For now, you can forcably dismiss your memory by clearing the alarm from your recent apps list
+      
+#### Future additions:
+   * Make UI prettier and more user friendly
+   * Remake app icon
+   * Add ability for user to snooze the alarm for a later time
+   * Add ability to set reoccuring alarms
+   * Add settings for user to change for app
+   * Etc (stuff that may or may not be added but we're thinking about/aware of)
+   
 #### Screenshots:
 ![1] ![2] ![3] ![4] ![5] ![6]
 
