@@ -15,4 +15,6 @@
     <string name="set">Set</string>
     <string name="memory_title">Memory Title</string>
     <string name="memory_description">What do you want to memorize?</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
 </resources>

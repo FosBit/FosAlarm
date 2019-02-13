@@ -28,7 +28,6 @@ import com.fosbit.studios.fosalarm.db.Memory;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -152,21 +151,41 @@ public class EditAlarmActivity extends AppCompatActivity {
             public void onClick( View v ) {
                 //Create an alert dialog
                 List<String> memoriesTitles = new ArrayList<>();
-                for ( int i = 0; i < memoriesList.size(); i++ ) {
-                    memoriesTitles.add( memoriesList.get( i ).getTitle() );
-                }
-                final CharSequence[] memories = memoriesTitles.toArray( new CharSequence[memoriesTitles.size()] );
                 final AlertDialog levelDialog;
                 AlertDialog.Builder builder = new AlertDialog.Builder( v.getContext() );
-                builder.setTitle( "Select a memory:" );
-                builder.setSingleChoiceItems( memories, 0, new DialogInterface.OnClickListener() {
-                    public void onClick( DialogInterface dialog, int item ) {
-                        selectedMemory.setText( memoriesList.get( item ).getTitle() );
-                        memoryID = memoriesList.get( item ).getMemoryID();
-                        memoryMessage = memoriesList.get( item ).getMessage();
-                        dialog.dismiss();
+                if ( memoriesList.size() == 0 ) {
+                    builder.setTitle( "There is no memory in the memory bank. Do you want to create one?" );
+                    // Add the buttons
+                    builder.setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick( DialogInterface dialog, int id ) {
+                            // Start edit memory activity
+                            Intent intent = new Intent( getBaseContext(), EditMemoryActivity.class );
+                            Bundle bundle = new Bundle();
+                            bundle.putBoolean( "ISNEW", true );
+                            intent.putExtras( bundle );
+                            getBaseContext().startActivity( intent );
+                        }
+                    });
+                    builder.setNegativeButton( R.string.cancel, new DialogInterface.OnClickListener() {
+                        public void onClick( DialogInterface dialog, int id ) {
+                            // User cancelled the dialog
+                        }
+                    });
+                } else {
+                    for ( int i = 0; i < memoriesList.size(); i++ ) {
+                        memoriesTitles.add( memoriesList.get( i ).getTitle() );
                     }
-                } );
+                    final CharSequence[] memories = memoriesTitles.toArray( new CharSequence[memoriesTitles.size()] );
+                    builder.setTitle( "Select a memory:" );
+                    builder.setSingleChoiceItems( memories, 0, new DialogInterface.OnClickListener() {
+                        public void onClick( DialogInterface dialog, int item ) {
+                            selectedMemory.setText( memoriesList.get( item ).getTitle() );
+                            memoryID = memoriesList.get( item ).getMemoryID();
+                            memoryMessage = memoriesList.get( item ).getMessage();
+                            dialog.dismiss();
+                        }
+                    } );
+                }
                 levelDialog = builder.create();
                 levelDialog.show();
             }
